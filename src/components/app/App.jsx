@@ -11,7 +11,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <MyNavbar brand="ალგორითმი" home="მთავარი" menu1="ამოცანები" menu2="თეორია" info="ინფორმაცია" right_menu1="ავტორიზაცია / რეგისტრაცია" />
+        <MyNavbar brand="ალგორითმი" home="მთავარი" menu1="ამოცანები" menu2="თეორია" info="ინფორმაცია" 
+        							right_menu1="ავტორიზაცია" right_menu2="რეგისტრაცია" />
         <HomeCarousel />
         <TextMessage />
         <Footer />

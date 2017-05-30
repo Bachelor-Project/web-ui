@@ -44,14 +44,11 @@ class MyNavbar extends Component {
     }
 
     onSignInOpen() {
-        this.setState({modalOpened: true});
+        this.setState({opened: true});
     }
 
     onSignInClose() {
-        this.setState({
-            title: 'ავტორიზაცია',
-            opened: false
-        });
+        this.setState({opened: false});
     }
 
     onSignUpOpen(){
@@ -86,6 +83,8 @@ class MyNavbar extends Component {
                         <NavItem eventKey={6} href="#" onClick={this.onSignUpOpen}>
                             <Glyphicon glyph="user" />  {this.props.right_menu2}
                         </NavItem>
+
+                        <SignInModal isOpen={this.state.opened} title="title" onClose={this.onSignInClose} />
                     </Nav>
                     </Navbar.Collapse>
                 </Navbar>

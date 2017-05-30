@@ -47,7 +47,7 @@ class SignInModal extends Component {
 
     render (){
         return (
-                <Modal.Dialog isOpen={this.props.isOpen} onClose={this.props.onHide}>
+                <Modal show={this.props.isOpen} onHide={this.props.onClose}>
 
                     <Modal.Header closeButton>
                         <Modal.Title>{this.props.title}</Modal.Title>
@@ -63,11 +63,11 @@ class SignInModal extends Component {
                     </Modal.Body>
 
                     <Modal.Footer>
-                        <Button onClick={this.props.onHide}>Close</Button>
+                        <Button onClick={this.props.onClose}>Close</Button>
                         <Button bsStyle="primary">sign in</Button>
                     </Modal.Footer>
 
-                </Modal.Dialog>
+                </Modal>
         );
     }
 }

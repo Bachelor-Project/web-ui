@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Route, Switch} from 'react-router-dom';
+import Home from '../home/Home';
 import Topics from '../topics/Topics';
 import Tasks from '../tasks/Tasks';
 
@@ -10,7 +11,8 @@ class RouterMain extends Component {
 		return (
 			<main>
 				<Switch >
-					<RouteComponent exact path={this.props.topicsPath} component={Topics} />
+					<RouteComponent exact path={this.props.homePath} component={Home} />
+					<RouteComponent path={this.props.topicsPath} component={Topics} />
 					<RouteComponent path={this.props.tasksPath} component={Tasks} />
 				</Switch>
 			</main>

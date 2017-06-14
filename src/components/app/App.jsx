@@ -6,6 +6,7 @@ import HomeCarousel from '../carousel/HomeCarousel';
 import TextMessage from '../textplain/TextMessage';
 import Footer from '../footer/Footer';
 import {BrowserRouter} from 'react-router-dom';
+import RouterMain from '../navbar/RouterMain';
 
 
 class App extends Component {
@@ -14,11 +15,14 @@ class App extends Component {
     return (
       <div className="App">
         <BrowserRouter>
-            <MyNavbar menu1="ამოცანები" menu2="თეორია"
+            <div>
+                <MyNavbar menu1="ამოცანები" menu2="თეორია"
         							right_menu1="ავტორიზაცია" right_menu2="რეგისტრაცია" homePath="/" topicsPath="/topics" tasksPath="/tasks" />
+                <RouterMain right_menu2="რეგისტრაცია" homePath="/" topicsPath="/topics" tasksPath="/tasks" />
+            </div>
         </BrowserRouter>
-        <HomeCarousel />
-        <TextMessage />
+        {/* <HomeCarousel /> */}
+        {/* <TextMessage /> */}
         {/* <Footer /> */}
       </div>
     );

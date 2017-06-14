@@ -70,13 +70,13 @@ class MyNavbar extends Component {
                         <Navbar.Collapse>
                         <Nav>
                             
-                            <NavItem componentClass="span" eventKey={1} onClick={this.onHomeClick} active ><Glyphicon glyph="home" />
+                            <NavItem eventKey={1} onClick={this.onHomeClick} active ><Glyphicon glyph="home" />
                                 <LinkComponent to={this.props.homePath} />
                             </NavItem>
-                            <NavItem componentClass="span" eventKey={2} onClick={this.onTasksClick} ><Glyphicon glyph="pencil" />  
+                            <NavItem eventKey={2} onClick={this.onTasksClick} ><Glyphicon glyph="pencil" />  
                                 <LinkComponent to={this.props.topicsPath} label="თემები" />
                             </NavItem>
-                            <NavItem componentClass="span" eventKey={3}  onClick={this.onTopicsClick} ><Glyphicon glyph="book" />
+                            <NavItem eventKey={3}  onClick={this.onTopicsClick} ><Glyphicon glyph="book" />
                                 <LinkComponent to={this.props.tasksPath} label="ამოცანები"/>
                             </NavItem>
                         </Nav>

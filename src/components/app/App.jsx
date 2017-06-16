@@ -9,6 +9,7 @@ import {BrowserRouter} from 'react-router-dom';
 import RouterMain from '../navbar/RouterMain';
 
 
+
 class App extends Component {
 
   render() {
@@ -18,7 +19,7 @@ class App extends Component {
             <div>
                 <MyNavbar menu1="ამოცანები" menu2="თეორია"
         							right_menu1="ავტორიზაცია" right_menu2="რეგისტრაცია" homePath="/" topicsPath="/topics" tasksPath="/tasks" />
-                <RouterMain right_menu2="რეგისტრაცია" homePath="/" topicsPath="/topics" tasksPath="/tasks" />
+                <RouterMain homePath="/" topicsPath="/topics" tasksPath="/tasks" />
             </div>
         </BrowserRouter>
         {/* <HomeCarousel /> */}

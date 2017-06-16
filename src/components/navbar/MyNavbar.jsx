@@ -3,8 +3,10 @@ import {Navbar, Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
 import {Glyphicon} from 'react-bootstrap';
 import {Router, Route, hashHistory } from 'react-router';
 import SignInModal from '../modals/signin/SignIn';
-import {Link} from 'react-router-dom';
+import SignUpModal from '../modals/signup/SignUp';
 import RouterMain from '../navbar/RouterMain';
+import {Link} from 'react-router-dom';
+import {LinkComponent} from '../generals/helpers/Components';
 
 
 class MyNavbar extends Component {
@@ -14,92 +16,107 @@ class MyNavbar extends Component {
 
         this.state = {
             title: '',
-            opened: false
+            signInOpened: false,
+            signUpOpened: false,
+
+            isUserSignIn: false,
+            username: '',
+
+            activeKey: 1
         }
 
-        this.onHomeClick = this.onHomeClick.bind(this);
-        this.onTasksClick = this.onTasksClick.bind(this);
-        this.onTopicsClick = this.onTopicsClick.bind(this);
-        this.onSignInOpen = this.onSignInOpen.bind(this);
-        this.onSignInClose = this.onSignInClose.bind(this);
-        this.onSignUpOpen = this.onSignUpOpen.bind(this);
-        this.onSignUpClose = this.onSignUpClose.bind(this);
     }
 
-    onHomeClick() {
-        alert("Home");
+    onSignInOpen = () => {
+        this.setState({signInOpened: true});
     }
 
-    onTasksClick() {
+    onSignInClose = () => {
+        this.setState({signInOpened: false});
     }
 
-    onTopicsClick() {
+    onSignUpOpen = () => {
+        this.setState({signUpOpened: true});
     }
 
-    onInfoClick() {
+    onSignUpClose = () => {
+         this.setState({signUpOpened: false});
     }
 
-    onSignInOpen() {
-        this.setState({opened: true});
+    handleSignOut = () => {
+        this.setState({ isUserSignIn: false });
     }
 
-    onSignInClose() {
-        this.setState({opened: false});
+    onSelectChange = (key) => {
+        var newActiveKey = key;
+        if ((key * 10)%10 != 0){
+            newActiveKey = Math.floor(key);
+        }
+        alert(newActiveKey);
+        this.setState({ activeKey: newActiveKey });
     }
 
-    onSignUpOpen(){
-
-    }
-
-    onSignUpClose(){
-
+    onSuccess = (user) => {
+        alert(user.username);
     }
 
     render(){
+        const isSigned = this.state.isUserSignIn;
 
         return (
-            <div>
-                
-                    <Navbar >
-                        <Navbar.Header>
-                            <Navbar.Brand>
-                                <a href="#">{this.props.brand}</a>
-                            </Navbar.Brand>
-                            <Navbar.Toggle />
-                        </Navbar.Header>
-                        <Navbar.Collapse>
-                        <Nav>
-                            
-                            <NavItem eventKey={1} onClick={this.onHomeClick} active ><Glyphicon glyph="home" />
-                                <LinkComponent to={this.props.homePath} />
-                            </NavItem>
-                            <NavItem eventKey={2} onClick={this.onTasksClick} ><Glyphicon glyph="pencil" />  
+                <Navbar onSelect={this.onSelectChange} >
+                    <Navbar.Header>
+                        <Navbar.Brand>
+                            <a href="#">{this.props.brand}</a>
+                        </Navbar.Brand>
+                        <Navbar.Toggle />
+                    </Navbar.Header>
+                    <Navbar.Collapse>
+                    <Nav>
+                        <NavItem eventKey={1} onClick={this.onHomeClick} active={1 == this.state.activeKey} >
+                            <LinkComponent to={this.props.homePath} label={<Glyphicon glyph="home" />} />
+                        </NavItem>
+                        <NavDropdown eventKey={2} title="თეორია და პრაქტიკა" id="main-topics-tasks" active={2 == this.state.activeKey}>
+                            <MenuItem eventKey={2.1} >
+                                <Glyphicon glyph="book" />
+                                {'  '}
                                 <LinkComponent to={this.props.topicsPath} label="თემები" />
-                            </NavItem>
-                            <NavItem eventKey={3}  onClick={this.onTopicsClick} ><Glyphicon glyph="book" />
+                            </MenuItem>
+                            <MenuItem eventKey={2.2}>
+                                <Glyphicon glyph="pencil" />
+                                {'  '}
                                 <LinkComponent to={this.props.tasksPath} label="ამოცანები"/>
-                            </NavItem>
-                        </Nav>
-                        <Nav pullRight>
-                            <NavItem eventKey={5} href="#" onClick={this.onSignInOpen}>
-                                <i className="fa fa-sign-in" />  {this.props.right_menu1}
-                            </NavItem>
-                            <NavItem eventKey={6} href="#" onClick={this.onSignUpOpen}>
-                                <Glyphicon glyph="user" />  {this.props.right_menu2}
-                            </NavItem>
+                            </MenuItem>
+                        </NavDropdown>
+                    </Nav>
+                    <Nav pullRight>
+                        {!isSigned && <NavItem eventKey={3} onClick={this.onSignInOpen}>
+                                            <i className="fa fa-sign-in" />  {this.props.right_menu1}
+                                        </NavItem>}
+                        {!isSigned && <NavItem eventKey={4} onClick={this.onSignUpOpen}>
+                                        <Glyphicon glyph="user" />  {this.props.right_menu2}
+                                    </NavItem>}
+                        {isSigned && <UserAccount title={this.state.username} onSignOutClick={this.handleSignOut} />}
 
-                            <SignInModal isOpen={this.state.opened} title="title" onClose={this.onSignInClose} />
-                        </Nav>
-                        </Navbar.Collapse>
-                    </Navbar>
-                    <RouterMain topicsPath={this.props.topicsPath} tasksPath={this.props.tasksPath} />
-            </div>
+                        <SignInModal show={this.state.signInOpened} title="ავტორიზაცია" onHide={this.onSignInClose} onSuccessAction={this.onSuccess} />
+                        <SignUpModal show={this.state.signUpOpened} title="რეგისტრაცია" onHide={this.onSignUpClose} onSuccessAction={this.onSuccess} />
+                    </Nav>
+                    </Navbar.Collapse>
+                </Navbar>
             )
   };
 }
 
 export default MyNavbar;
 
-function LinkComponent(props) {
-    return (<Link to={props.to}>{props.label}</Link>);
+
+
+function UserAccount(props) {
+    return (
+        <NavDropdown eventKey={2} title={props.title} id="user-account">
+            <MenuItem eventKey={2.1} onClick={props.onSignOutClick} >
+                გამოსვლა
+            </MenuItem>
+        </NavDropdown>
+    );
 }

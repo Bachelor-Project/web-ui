@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import GeneralTable from '../generals/table/GeneralTable';
 
+
 const headers = ['N', 'ამოცანის თემა', 'აღწერა', 'რაოდენობა'];
 
 const tasks = [
 	{
 		id: 1,
 		name: 'გრაფი',
-		descrip: 'აქ თქვენ ნახავთ ამოცანებს გრფზე',
+		descrip: 'აქ თქვენ ნახავთ ამოცანებს გრაფზე',
 		number: '10'
 	},
 	{

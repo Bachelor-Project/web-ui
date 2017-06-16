@@ -2,11 +2,15 @@ import React, {Component} from 'react';
 import {FieldGroup, Selector} from '../../generals/helpers/Components';
 
 
-export default class TopicUploadModal extends Component {
+const topics = [
+	"გრაფი",
+	"ალგებრა",
+	"გეომეტრია",
+	"N*Log(N)"
+];
 
-	constructor(props) {
-		super(props);
-	}
+
+export default class TopicUploadModal extends Component {
 
 	render (){
 		return (
@@ -22,9 +26,3 @@ export default class TopicUploadModal extends Component {
 }
 
 
-const topics = [
-	"გრაფი",
-	"ალგებრა",
-	"გეომეტრია",
-	"N*Log(N)"
-];

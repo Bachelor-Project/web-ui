@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
 import {Navbar, Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
 import {Glyphicon} from 'react-bootstrap';
-import {Router, Route, hashHistory } from 'react-router';
-import RouterMain from '../navbar/RouterMain';
-import {Link} from 'react-router-dom';
 import {LinkComponent} from '../generals/helpers/Components';
 
 
@@ -21,7 +18,7 @@ class MyNavbar extends Component {
 
     onSelectChange = (key) => {
         var newActiveKey = key;
-        if ((key * 10)%10 != 0){
+        if ((key * 10)%10 !== 0){
             newActiveKey = Math.floor(key);
         }
         this.setState({ activeKey: newActiveKey });
@@ -34,7 +31,7 @@ class MyNavbar extends Component {
     render(){
 
         return (
-                <Navbar onSelect={this.onSelectChange} >
+                <Navbar onSelect={this.onSelectChange} staticTop={true} >
                     <Navbar.Header>
                         <Navbar.Brand>
                             <a href="#">{this.props.brand}</a>
@@ -43,11 +40,11 @@ class MyNavbar extends Component {
                     </Navbar.Header>
                     <Navbar.Collapse>
                     <Nav>
-                        <NavItem eventKey={1} onClick={this.onHomeClick} active={1 == this.state.activeKey} >
+                        <NavItem eventKey={1} onClick={this.onHomeClick} active={1 === this.state.activeKey} >
                             <LinkComponent to={this.props.homePath} label={<Glyphicon glyph="home" />} />
                         </NavItem>
 
-                        <NavDropdown eventKey={2} title="თეორია და პრაქტიკა" id="main-topics-tasks" active={2 == this.state.activeKey}>
+                        <NavDropdown eventKey={2} title="თეორია და პრაქტიკა" id="main-topics-tasks" active={2 === this.state.activeKey}>
                             <MenuItem eventKey={2.1} >
                                 <Glyphicon glyph="book" />
                                 {'  '}
@@ -61,7 +58,7 @@ class MyNavbar extends Component {
                         </NavDropdown>
 
                         {this.props.isSigned && this.props.isUploader &&
-                            <NavDropdown eventKey={3} title="ატვირთვა" id="main-upload" active={3 == this.state.activeKey}>
+                            <NavDropdown eventKey={3} title="ატვირთვა" id="main-upload" active={3 === this.state.activeKey}>
                                 <MenuItem eventKey={3.1} >
                                     <span onClick={this.props.onTopicUploadClick} >
                                         <Glyphicon glyph="book" />

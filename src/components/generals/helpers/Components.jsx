@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {Modal} from 'react-bootstrap';
-import {Form, FormGroup, ControlLabel, FormControl, HelpBlock, InputGroup} from 'react-bootstrap';
+import {FormGroup, ControlLabel, FormControl, HelpBlock, InputGroup} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 
 
@@ -61,7 +60,7 @@ export class Selector extends Component {
 
         return (
             <div>
-                <FormGroup controlId="MultySelectorId">
+                <FormGroup controlId={this.props.controlId} >
                     <ControlLabel>{this.props.title}</ControlLabel>
                     {this.props.searchable && <FormControl type="text" placeholder="ძებნა" onChange={this.onSearchChange} />}
                     <FormControl componentClass="select" multiple={this.props.isMultiple} >

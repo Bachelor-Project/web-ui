@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Modal} from 'react-bootstrap';
-import {FormControl, FormGroup, Button} from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import {FieldGroup, FieldGroupWithAddon} from '../../generals/helpers/Components';
 import $ from 'jquery';
 

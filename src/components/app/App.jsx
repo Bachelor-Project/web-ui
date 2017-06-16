@@ -12,6 +12,13 @@ import TopicUploadModal from '../modals/upload/TopicUploader';
 import TaskUploadModal from '../modals/upload/TaskUploader';
 
 
+const routerPathes = {
+    home: '/',
+    topics: '/topics',
+    tasks: '/tasks'
+}
+
+
 class App extends Component {
 
     constructor(props) {
@@ -87,7 +94,8 @@ class App extends Component {
                     <SignInModal show={this.state.signInOpened} title="ავტორიზაცია" onHide={this.onSignInClose} onSuccessAction={this.onSuccess} />
                     <SignUpModal show={this.state.signUpOpened} title="რეგისტრაცია" onHide={this.onSignUpClose} onSuccessAction={this.onSuccess} />
                     <CustomUploadModal title="თემის ატვირთვა" show={this.state.topicUploadOpen} onHide={this.topicUploadClose} body={<TopicUploadModal />} />
-                    <CustomUploadModal title="ამოცანის ატვირთვა" show={this.state.taskUploadOpen} onHide={this.taskUploadClose} body={<TaskUploadModal />} />
+                    <TaskUploadModal title="ამოცანის ატვირთვა" show={this.state.taskUploadOpen} onHide={this.taskUploadClose} />
+                    {/* <CustomUploadModal title="ამოცანის ატვირთვა" show={this.state.taskUploadOpen} onHide={this.taskUploadClose} body={<TaskUploadModal />} /> */}
                 </div>
             </BrowserRouter>
           </div>
@@ -96,9 +104,3 @@ class App extends Component {
 }
 
 export default App;
-
-const routerPathes = {
-    home: '/',
-    topics: '/topics',
-    tasks: '/tasks'
-}

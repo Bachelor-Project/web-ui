@@ -3,10 +3,6 @@ import {Modal, Button} from 'react-bootstrap';
 
 class CustomUploadModal extends Component {
 
-	constructor(props) {
-		super(props);
-	}
-
 	onUploadClick = () => {
 		alert("Upload");
 	}

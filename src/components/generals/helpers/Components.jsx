@@ -54,8 +54,9 @@ export class Selector extends Component {
     render() {
         const lowerCaseSearchVal = this.state.searchValue.toLowerCase();
         const options = this.props.selectorData.map( function(elem, index){
-            if (!elem.toLowerCase().includes(lowerCaseSearchVal)) return null;
-            return (<option key={index} value={elem}>{elem}</option>);
+            if (lowerCaseSearchVal && !elem.toLowerCase().includes(lowerCaseSearchVal)) return null;
+            var reactKey = (typeof obj === "undefined") ? index : elem.id;
+            return (<option key={reactKey} value={elem.id}>{elem.descrip}</option>);
         });
 
         return (

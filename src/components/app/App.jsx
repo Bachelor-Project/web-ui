@@ -10,6 +10,7 @@ import SignUpModal from '../modals/signup/SignUp';
 import CustomUploadModal from '../modals/upload/CustomModal';
 import TopicUploadModal from '../modals/upload/TopicUploader';
 import TaskUploadModal from '../modals/upload/TaskUploader';
+import $ from 'jquery';
 
 
 const routerPathes = {
@@ -33,7 +34,10 @@ class App extends Component {
             username: '',
 
             topicUploadOpen: false,
-            taskUploadOpen: false
+            taskUploadOpen: false,
+
+            mainTopics: [],
+            levels: []
         }
     }
 
@@ -65,12 +69,27 @@ class App extends Component {
         this.setState({ topicUploadOpen: false });
     }
 
+
     taskUploadOpenHandler = () => {
         this.setState({ taskUploadOpen: true });
+        this.fetchTaskModalData();
     }
+    // connect to server and fetch all needed data:
+    fetchTaskModalData = () => {
+        $.get('/task/api/main_topics',  (data) => {
+                                            this.setState({ mainTopics: data });
+                                        }, 'json');
+        $.get('/task/api/levels',   (data) => {
+                                        this.setState({ levels: data });
+                                    }, 'json');
+
+    }
+
+
     taskUploadClose = () => {
         this.setState({ taskUploadOpen: false });
     }
+
 
 
     onSuccess = (user) => {
@@ -94,7 +113,9 @@ class App extends Component {
                     <SignInModal show={this.state.signInOpened} title="ავტორიზაცია" onHide={this.onSignInClose} onSuccessAction={this.onSuccess} />
                     <SignUpModal show={this.state.signUpOpened} title="რეგისტრაცია" onHide={this.onSignUpClose} onSuccessAction={this.onSuccess} />
                     <CustomUploadModal title="თემის ატვირთვა" show={this.state.topicUploadOpen} onHide={this.topicUploadClose} body={<TopicUploadModal />} />
-                    <TaskUploadModal title="ამოცანის ატვირთვა" show={this.state.taskUploadOpen} onHide={this.taskUploadClose} />
+                    <TaskUploadModal title="ამოცანის ატვირთვა" show={this.state.taskUploadOpen} onHide={this.taskUploadClose}
+                                        levels={this.state.levels} mainTopics={this.state.mainTopics} />
+
                     {/* <CustomUploadModal title="ამოცანის ატვირთვა" show={this.state.taskUploadOpen} onHide={this.taskUploadClose} body={<TaskUploadModal />} /> */}
                 </div>
             </BrowserRouter>

@@ -4,11 +4,11 @@ import {Link} from 'react-router-dom';
 
 
 // Helper FieldGroup components:
-export function FieldGroup ({id, validState, label, help, feedback, ...props}) {
+export function FieldGroup ({id, validState, label, help, feedback, inputID, ...props}) {
     return (
-        <FormGroup controlId={id} validationState={validState}>
+        <FormGroup validationState={validState}>
             {label && <ControlLabel>{label}</ControlLabel>}
-            <FormControl {...props} />
+            <FormControl id={inputID} {...props} />
             {help && <HelpBlock>{help}</HelpBlock>}
             {feedback && <FormControl.Feedback />}
         </FormGroup>
@@ -16,12 +16,12 @@ export function FieldGroup ({id, validState, label, help, feedback, ...props}) {
 }
 
 
-export function FieldGroupWithAddon ({id, validState, addonSymbol, help, feedback, ...props}) {
+export function FieldGroupWithAddon ({id, validState, addonSymbol, help, feedback, inputID, ...props}) {
     return (
         <FormGroup controlId={id} validationState={validState}>
             <InputGroup>
                 <InputGroup.Addon>{addonSymbol}</InputGroup.Addon>
-                <FormControl {...props} />
+                <FormControl id={inputID} {...props} />
             </InputGroup>
             {help && <HelpBlock>{help}</HelpBlock>}
             {feedback && <FormControl.Feedback />}

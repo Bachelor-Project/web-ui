@@ -76,12 +76,25 @@ class App extends Component {
     }
     // connect to server and fetch all needed data:
     fetchTaskModalData = () => {
-        $.get('/task/api/main_topics',  (data) => {
-                                            this.setState({ mainTopics: data });
-                                        }, 'json');
-        $.get('/task/api/levels',   (data) => {
-                                        this.setState({ levels: data });
-                                    }, 'json');
+        $.ajax({
+            url: '/task/api/main_topics',
+            type: 'GET',
+            success: (data) => {
+                        this.setState({ mainTopics: data });
+                    },
+            dataType: 'json',
+            cache: false
+        });
+
+        $.ajax({
+            url: '/task/api/levels',
+            type: 'GET',
+            success: (data) => {
+                        this.setState({ levels: data });
+                    },
+            dataType: 'json',
+            cache: false
+        });
 
     }
 

@@ -2,14 +2,14 @@ import React, {Component} from 'react';
 import { Carousel } from 'react-bootstrap';
 
 
-function CustomCaption(props) {
-    return (
-            <Carousel.Caption>
-                <h3>{props.title}</h3>
-                <p>{props.text}</p>
-            </Carousel.Caption>
-    );
-}
+// function CustomCaption(props) {
+//     return (
+//             <Carousel.Caption>
+//                 <h3>{props.title}</h3>
+//                 <p>{props.text}</p>
+//             </Carousel.Caption>
+//     );
+// }
 
 
 function CustomItem(props) {

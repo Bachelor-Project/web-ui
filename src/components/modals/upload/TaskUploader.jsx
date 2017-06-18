@@ -28,49 +28,37 @@ const languages = [
 ];
 
 
-const topics = [
-	"გრაფი",
-	"ალგებრა",
-	"გეომეტრია",
-	"N*Log(N)"
-];
-
 
 export default class TaskUploadModal extends Component {
 
-	constructor(props) {
-		super(props);
-
-	}
 
 	onUploadClick = () => {
 		alert("Upload");
 
 		var data = new FormData();
-		// for (var i = 0; i < 3; i++){
-		// 	$.each($(':file')[i].files, function(i, file) {
-		// 		alert("aq ??" + file.name);
-		// 	    data.append('file-'+i, file);
-		// 	});
-		// }
 
 		data.append('file', $(':file')[0].files[0]);
 
-		// $.post('/task/api/upload', data, (response) => {
-		// 	alert(response);
-		// }, 'text');
-
 		$.ajax({
 	        url: '/task/api/upload',
-	        method: 'post',
+	        type: 'POST',
 	        data: data,
 	        processData: false,
-	        contentType: 'multipart/form-data',
-	        dataType: 'text',
+	        // contentType: false,
+	        dataType: 'text/plain',
 	        success: function (data, textStatus, xhr) {
-	            alert(data);
-	        }
-    	});
+			            alert(data);
+			        }
+		});
+
+		// $("#task-file").fileUpload({
+		// 	url: '/task/api/upload',
+		// 	type: 'post', // unda ?
+		// 	dataType: 'text',
+		// 	done: (e, data) => {
+		// 			alert(data);
+		// 		}
+		// });
 	}
 
 
@@ -84,7 +72,7 @@ export default class TaskUploadModal extends Component {
 				</Modal.Header>
 				<Modal.Body>
 					<form >
-						<FieldGroup id="conditionFormGr" label="აირჩიეთ ამოცანის ფაილი" type="file" />
+						<FieldGroup id="conditionFormGr" label="აირჩიეთ ამოცანის ფაილი" inputID="task-file" type="file" />
 						<FieldGroup id="testFormGr" label="აირჩიეთ ტესტების ფაილის არქივი" type="file" />
 						<FieldGroup id="hinterFormGr" label="აირჩიეთ მითითებების ფაილი" type="file" />
 						<Selector title="შეიძლება დაიწეროს:" selectorData={languages} isMultiple={true} searchable={true} 

@@ -1,5 +1,9 @@
 import React,{Component} from 'react';
+import {Route, Switch} from 'react-router-dom';
+
 import GeneralTable from '../generals/table/GeneralTable';
+import TopicDep from '../departments/topic/TopicDep';
+
 
 
 const headers = ['N', 'თემის დასახელება', 'აღწერა', 'რაოდენობა'];
@@ -27,8 +31,14 @@ const topics = [
 
 class Topics extends Component {
 	render (){
+		const topicsPath = this.props.path;
 		return (
-			<GeneralTable headData={headers} bodyData={topics} />
+			<Switch>
+				<Route exact path={topicsPath} render={() => (<GeneralTable path={topicsPath} headData={headers} 
+																						bodyData={topics} />)} />
+				<Route path={topicsPath + '/:topicId'} component={TopicDep} />
+			</Switch>
+			
 		);
 	}
 }

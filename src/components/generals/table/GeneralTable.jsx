@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Table} from 'react-bootstrap';
+import {LinkComponent} from '../helpers/Components';
 
 
 
@@ -9,7 +10,7 @@ class TableCustomRow extends Component {
 		return (
 			<tr>
 				<td>{this.props.index}</td>
-				<td><a href="/index.html">{this.props.data.name}</a></td>
+				<td><LinkComponent to={this.props.path + '/' + this.props.data.id} label={this.props.data.name} /></td>
 				<td>{this.props.data.descrip}</td>
 				<td>{this.props.data.number}</td>
 			</tr>
@@ -32,7 +33,7 @@ class GeneralTable extends Component {
 		});
 
 		bodyData.forEach((entry, i) => {
-			rows.push(<TableCustomRow index={i+1} data={entry} key={i} />);
+			rows.push(<TableCustomRow path={this.props.path} index={i+1} data={entry} key={i} />);
 		});
 
 		return (

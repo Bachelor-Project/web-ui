@@ -8,12 +8,15 @@ import Tasks from '../tasks/Tasks';
 class RouterMain extends Component {
 
 	render (){
+		const topicsPath = this.props.topicsPath;
+		const tasksPath = this.props.tasksPath;
+
 		return (
 			<main>
 				<Switch >
 					<RouteComponent exact path={this.props.homePath} component={Home} />
-					<RouteComponent path={this.props.topicsPath} component={Topics} />
-					<RouteComponent path={this.props.tasksPath} component={Tasks} />
+					<RouteComponent path={topicsPath} render={() => (<Topics path={topicsPath} />) } />
+					<RouteComponent path={tasksPath} render={() => (<Tasks path={tasksPath} />)} />
 				</Switch>
 			</main>
 		);

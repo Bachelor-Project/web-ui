@@ -1,10 +1,9 @@
-import './TopicDepStyle.css';
-
 import React, {Component} from 'react';
-import { slide as Menu } from 'react-burger-menu'
-import {Treebeard} from 'react-treebeard';
 import {Button} from 'react-bootstrap';
 import $ from 'jquery';
+
+import {ToggleMenu} from '../../generals/helpers/Components';
+
 
 
 
@@ -68,19 +67,24 @@ class TopicDep extends Component {
 
     }
 
+    // Change task from left menu:
+	handleTopicChange = (node) => {
+
+		alert("გადმოსაწერია თემა id-ით " + node.id);
+		this.setState({ taskId: node.id, taskContent: 'task content of ' + node.name });
+	}
+
 
 	render (){
 		return (
-			<div>
-				<Menu width={ '16%' } >
-			        <Treebeard 
-		                data={treeData}
-		                onToggle={this.onToggle}
-		            />
-				</Menu>
-				<TopicHeader topicTitle={this.state.topicTitle} topicId={this.state.topicId} />
-				<div style={{textAlign: 'center'}} >
-					{this.state.topicContent}
+			<div style={{position: 'relative'}} >
+				<ToggleMenu treeData={treeData} nodeChangeHandler={this.handleTopicChange} />
+
+				<div className="container" style={{position: 'absolute', right: '0px', top: '54px', width: '84%'}} >
+					<TopicHeader topicTitle={this.state.topicTitle} topicId={this.state.topicId} />
+					<div style={{textAlign: 'center'}} >
+						{this.state.topicContent}
+					</div>
 				</div>
 			</div>
 		);

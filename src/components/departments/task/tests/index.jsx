@@ -30,7 +30,7 @@ class TaskTests extends Component {
 		});
 	}
 
-
+	// -----
 	handleChildSelectChange = (checked, testName) => {
 		alert(checked);
 
@@ -69,8 +69,6 @@ class TaskTests extends Component {
 		const selectedBoxes = this.state.selectedTestsNames;
 		var isSelectedAll = this.state.selectedAllTest;
 		var testElements = [];
-		const childValueChange = this.handleChildSelectChange;
-		const changeFromChild = this.state.changeByChild;
 
 		const value = this.state.value;
 		if (this.props.tests !== undefined){
@@ -80,25 +78,22 @@ class TaskTests extends Component {
 												data={testData} 
 												isDisabled={isSelectedAll}
 												isSelected={isSelectedAll} 
-												// changeByAnyChild={changeFromChild} 
-												// onValueChange={childValueChange} 
-												// parentValue={value} 
-												// selected={selected} 
 												/>);
 			});
 		}
 
 		return (
-			<div style={{overflow: 'auto', maxHeight: '200px', }} >
-				<Table responsive >
+			<div style={{marginTop: '8px'}} >
+				<Table responsive > 
 					<thead>
-						<tr>
+						<tr style={{backgroundColor: '#e1eaea', height: '10px'}} >
 							<th>
-								<Checkbox onClick={this.onAllTestClick} checked={this.state.selectedAllTest} ></Checkbox>
+								<Checkbox onClick={this.onAllTestClick} checked={this.state.selectedAllTest} 
+											style={{margin: '0px'}} ></Checkbox>
 							</th>
-							<th>ტესტი</th>
-							<th>Input</th>
-							<th>Output</th>
+							<th style={{paddingBottom: '10px'}} >ტესტი</th>
+							<th style={{paddingBottom: '10px'}} >Input</th>
+							<th style={{paddingBottom: '10px'}} >Output</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -125,12 +120,11 @@ class TestElement extends Component {
 
 	onTestClick = (event) => {
 		this.setState({ isSelected : event.target.checked });
-		// this.props.onValueChange(event.target.value, this.props.data.name);
 	}
 
 	getSlices(symbol, data) {
 		return  data.split(symbol).map(function(elem, i){
-					return (<p key={i}>{elem}</p>);
+					return (<span key={i} style={{fonstSize: '16px'}} >{elem}<br /></span>);
 				});
 	}
 
@@ -139,10 +133,6 @@ class TestElement extends Component {
 	}
 
 	render() {
-		// const pv = this.props.parentValue;
-		// console.log((pv == 2) ? "axla selected: " + this.state.isDisabled : '');
-		// const selected = (pv == 2 || this.state.isDisabled) ? this.state.selected : pv == 1;
-
 		const inputs = this.getSlices('\n', this.props.data.input);
 		const outputs = this.getSlices('\n', this.props.data.output);
 
@@ -151,10 +141,9 @@ class TestElement extends Component {
 				<td>
 					<Checkbox disabled={this.props.isDisabled} 
 								onClick={this.onTestClick}
-								checked={this.state.isSelected}
-							 ></Checkbox>
+								checked={this.state.isSelected}></Checkbox>
 				</td>
-				<td>
+				<td style={{fontSize: '16px', paddingTop: '20px'}}>
 					{this.props.data.name}
 				</td>
 				<td>{inputs}</td>

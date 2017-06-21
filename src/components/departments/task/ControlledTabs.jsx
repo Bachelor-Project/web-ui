@@ -2,6 +2,15 @@ import React, {Component} from 'react';
 import {Tabs, Tab} from 'react-bootstrap';
 
 
+function AspectRatioDivs(props) {
+	return (<div style={{position: 'relative', width: '100%', paddingTop: '30%'}} >
+				<div style={{position: 'absolute', top: '0', right: '0', bottom: '0', left: '0', overflow: 'auto'}} >
+					{props.content}
+				</div>
+			</div>);
+}
+
+
 class ControlledTabs extends Component {
 
 	constructor(props) {
@@ -17,8 +26,13 @@ class ControlledTabs extends Component {
 	}
 
 	render() {
+		const hasAspectRatioHeight = this.props.hasAspectRatioHeight;
 		const childrenTabs = this.props.tabs.map((tab) => {
-			return (<Tab eventKey={tab.id} key={tab.id} title={tab.title} >{tab.content}</Tab>);
+			return (<Tab eventKey={tab.id} key={tab.id} title={tab.title} >
+						{hasAspectRatioHeight 	? <AspectRatioDivs content={tab.content} />
+												: tab.content
+						}
+					</Tab>);
 		});
 
 		return (
@@ -30,3 +44,5 @@ class ControlledTabs extends Component {
 }
 
 export default ControlledTabs;
+
+

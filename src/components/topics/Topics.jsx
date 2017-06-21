@@ -34,7 +34,7 @@ class Topics extends Component {
 		const topicsPath = this.props.path;
 		return (
 			<Switch>
-				<Route exact path={topicsPath} render={() => (<GeneralTable path={topicsPath} headData={headers} 
+				<Route exact path={topicsPath} render={() => (<GeneralTable path={topicsPath} pageTitle="თეორია" headData={headers} 
 																						bodyData={topics} />)} />
 				<Route path={topicsPath + '/:topicId'} component={TopicDep} />
 			</Switch>

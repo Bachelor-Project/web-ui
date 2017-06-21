@@ -31,7 +31,7 @@ class MyNavbar extends Component {
     render(){
 
         return (
-                <Navbar onSelect={this.onSelectChange} staticTop={true} >
+                <Navbar onSelect={this.onSelectChange} staticTop={true} fixedTop >
                     <Navbar.Header>
                         <Navbar.Brand>
                             <a href="#">{this.props.brand}</a>

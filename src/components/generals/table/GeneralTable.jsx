@@ -37,14 +37,17 @@ class GeneralTable extends Component {
 		});
 
 		return (
-				<Table bordered condensed hover>
-				    <thead>
-						<tr>
-							{heads}
-						</tr>
-					</thead>
-				    <tbody>{rows}</tbody>
-			  	</Table>
+				<div className="container" style={{margin: '5% auto'}}>
+					<h2 style={{textAlign: 'center', marginBottom: '20px'}} >{this.props.pageTitle}</h2>
+					<Table bordered condensed hover >
+					    <thead>
+							<tr>
+								{heads}
+							</tr>
+						</thead>
+					    <tbody>{rows}</tbody>
+				  	</Table>
+		  		</div>
 		)
 	} 
 }

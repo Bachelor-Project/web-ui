@@ -1,6 +1,10 @@
+import './toggleMenuStyle.css';
+
 import React, {Component} from 'react';
 import {FormGroup, ControlLabel, FormControl, HelpBlock, InputGroup} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
+import {slide as Menu} from 'react-burger-menu';
+import {Treebeard} from 'react-treebeard';
 
 
 // Helper FieldGroup components:
@@ -69,6 +73,49 @@ export class Selector extends Component {
                     </FormControl>
                 </FormGroup>
             </div>
+        );
+    }
+}
+
+
+const menuStyle = {
+    bmBurgerButton: {
+        position: 'fixed',
+        width: '36px',
+        height: '30px',
+        left: '36px',
+        top: '12px',
+        zIndex: '2000'
+    }
+}
+
+export class ToggleMenu extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {}
+    }
+
+    onToggle = (node, toggled) => {
+        if(this.state.cursor){this.state.cursor.active = false;}
+        node.active = true;
+        if(node.children){ node.toggled = toggled; }
+
+        this.setState({ cursor: node });
+        if (node.id){
+            this.props.nodeChangeHandler(node);
+        }
+    }
+
+    render() {
+        return (
+            <Menu width={ '16%' } styles={menuStyle}>
+                    <Treebeard 
+                        data={this.props.treeData}
+                        onToggle={this.onToggle}
+                    />
+            </Menu>
         );
     }
 }

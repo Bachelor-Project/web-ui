@@ -8,7 +8,8 @@ function Paragraphs(props) {
 	return (
 			<div>
 				{props.text.split('\n').map((token, i) => {
-										return (<p key={i}>{token}</p>);
+										return (<span key={i} style={{fonstSize: '16px', textAlign: 'justify'}} >
+													{token}<br/></span>);
 								})}
 			</div>
 			);
@@ -20,8 +21,8 @@ const fakeComments = [
 	{
 		id: 1,
 		user: 'user_1',
-		text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy \n" +
-				"text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. \n" + 
+		text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy" +
+				"text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book." + 
 				"It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
 	},
 	{
@@ -53,8 +54,10 @@ class TaskAnalyzer extends Component {
 	onPublishClick = () => {
 		var currComments = this.state.comments.slice();
 		let text = $("#analyse-input").val();
-		currComments.push({ user: 'user_new', text: $("#analyse-input").val() });
-		this.setState({ comments: currComments });
+		if (text.length() > 0){
+			currComments.push({ user: 'user_new', text: $("#analyse-input").val() });
+			this.setState({ comments: currComments });
+		}
 	}
 
 
@@ -73,9 +76,10 @@ class TaskAnalyzer extends Component {
 		return (
 			<div>
 				{listComments}
-				<div>
-					<textarea rows="10" cols="100" id="analyse-input" placeholder="შეიყვანეთ ტექსტი" />
-					<Button onClick={this.onPublishClick} >გამოქვეყნება</Button>
+				<div style={{border: '2px dotted black', padding: '8px', marginTop: '16px', borderTop: 'none'}} >
+					<textarea rows="10" style={{width: '100%'}} id="analyse-input" placeholder="შეიყვანეთ ტექსტი" />
+					<Button onClick={this.onPublishClick} 
+							style={{width: '80%', margin: '0px 10%'}} > გამოქვეყნება</Button>
 				</div>
 			</div>
 		);

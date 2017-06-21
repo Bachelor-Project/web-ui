@@ -127,10 +127,3 @@ class TopicHeader extends Component {
 		);
 	}
 }
-
-
-
-
-
-// <Header />
-// <Content />

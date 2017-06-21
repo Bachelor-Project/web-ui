@@ -26,7 +26,7 @@ class Hinter extends Component {
 			}); 
 		}
 		return (
-			<Panel id={this.props.id} header={HinterPanelTitle} >
+			<Panel id={this.props.id} header={HinterPanelTitle} style={{marginTop: "16px"}} >
 				<div>
 					{hinterElements}
 				</div>

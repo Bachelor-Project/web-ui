@@ -8,12 +8,12 @@ import {Treebeard} from 'react-treebeard';
 
 
 // Helper FieldGroup components:
-export function FieldGroup ({id, validState, label, help, feedback, inputID, ...props}) {
+export function FieldGroup ({id, validState, label, help, feedback, ...props}) {
     return (
         <FormGroup validationState={validState}>
             {label && <ControlLabel>{label}</ControlLabel>}
-            <FormControl id={inputID} {...props} />
-            {help && <HelpBlock>{help}</HelpBlock>}
+            <FormControl id={id} {...props} />
+            {feedback && <HelpBlock>{help}</HelpBlock>}
             {feedback && <FormControl.Feedback />}
         </FormGroup>
     );

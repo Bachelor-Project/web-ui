@@ -24,12 +24,7 @@ class MyNavbar extends Component {
         this.setState({ activeKey: newActiveKey });
     }
 
-    onSuccess = (user) => {
-        alert(user.username);
-    }
-
     render(){
-
         return (
                 <Navbar onSelect={this.onSelectChange} staticTop={true} fixedTop >
                     <Navbar.Header>
@@ -83,7 +78,8 @@ class MyNavbar extends Component {
                         {!this.props.isSigned && <NavItem eventKey={5} onClick={this.props.onSignUpShow}>
                                         <Glyphicon glyph="user" />  {this.props.right_menu2}
                                     </NavItem>}
-                        {this.props.isSigned && <UserAccount title={this.props.username} onSignOutClick={this.props.signOutHandle} />}
+                        {this.props.isSigned && <UserAccount homePath={this.props.homePath} 
+                                                            onSignOutClick={this.props.signOutHandle} />}
 
                     </Nav>
                     </Navbar.Collapse>
@@ -97,10 +93,11 @@ export default MyNavbar;
 
 
 function UserAccount(props) {
+    const username = window.localStorage.getItem("user");
     return (
-        <NavDropdown eventKey={2} title={props.title} id="user-account">
+        <NavDropdown eventKey={2} title={username} id="user-account">
             <MenuItem eventKey={2.1} onClick={props.onSignOutClick} >
-                გამოსვლა
+                <LinkComponent to={props.homePath} label="გამოსვლა" />
             </MenuItem>
         </NavDropdown>
     );

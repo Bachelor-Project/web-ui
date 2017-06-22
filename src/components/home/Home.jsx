@@ -8,7 +8,7 @@ class Home extends Component {
 	render(){
 		return (
 			<div>
-				<HomeCarousel style={{maxWidth: '85%', margin: '5% auto'}} />
+				<HomeCarousel style={{maxWidth: '85%', margin: '6% auto'}} />
 		        <TextMessage />
 		        {/* <Footer /> */}
 			</div>

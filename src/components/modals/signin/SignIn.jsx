@@ -19,43 +19,44 @@ export default class SignInModal extends Component {
         super(props);
 
         this.state = {
-            help: null,
             isInputIncorrect: false
         }
     }
 
     onSignInClick = () => {
-        this.setState({ isInputIncorrect: true });
+        var requestJson = {}
+        requestJson.username = $('#signInName').val();
+        requestJson.password = $('#signInPassword').val();
+
         $.ajax({
-            url: '/bp-SignIn/app/',
+            url: '/bp-SignIn/app/signin',
             method: 'post',
-            headers: {'Authentication': 'eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJ1c2VyIl0sImlzcyI6Imlzc3VlciIsImlkIjowLCJleHAiOjE0OTk3NzYwNDUsInVzZXJuYW1lIjoiYmxhIn0.__ZbT9z4_6qNr-8o4bNIyfzN_-T86tdwy-p7gRmnGyU'},
+            // headers: {'Authentication': window.localStorage.getItem("token")}, // to "log out"-ti gaketebulia token agar iqneba
             contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(signIntOb)
+            data: JSON.stringify(requestJson)
         })
         .then(function(response){
-            window.localStorage.setItem("token", response);
-            console.log(window.localStorage.getItem("token"));
-        })
+                this.props.onSuccessAction(response);
+                this.onHideAction();
+            }.bind(this))
         .catch(function(error){
-            alert("error");
-        });
+                if (error.status == 400){
+                    this.setState({ isInputIncorrect: true });
+                }
+            }.bind(this));
     }
 
-    onSuccess = (response) => {
-        window.localStorage.setItem("token", response);
-        console.log(window.localStorage.getItem("token"));
+    onHideAction = () => {
+        if (this.state.isInputIncorrect){
+            this.setState({ isInputIncorrect: false });
+        }
+
         this.props.onHide();
-        // this.props.onSuccessAction(user);
-    }
-
-    onError = (error) => {
-        alert("error");
     }
 
     render () {
         return (
-            <Modal show={this.props.show} onHide={this.props.onHide}>
+            <Modal show={this.props.show} onHide={this.onHideAction}>
                 <Modal.Header closeButton>
                     <Modal.Title>{this.props.title}</Modal.Title>
                 </Modal.Header>
@@ -64,12 +65,11 @@ export default class SignInModal extends Component {
                         <FieldGroup id="signInName" type="text" placeholder="username" />
                         <FieldGroup id="signInPassword" type="password" placeholder="პაროლი" />
                         <IncorrectInputs incorrect={this.state.isInputIncorrect} />
-                        <FormControl.Static>დაგავიწყდათ პაროლი?</FormControl.Static>
                     </form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.props.onHide}>Close</Button>
-                    <Button onClick={this.onSignInClick}>Sign in</Button>
+                    <Button onClick={this.onHideAction}>Close</Button>
+                    <Button bsStyle="primary" onClick={this.onSignInClick}>Sign in</Button>
                 </Modal.Footer>
             </Modal>
         );
@@ -80,7 +80,7 @@ class IncorrectInputs extends Component {
 
     render (){
         return (
-            <FormGroup validationState="error" >
+            <FormGroup validationState="error" style={{color: 'red'}} >
                         {this.props.incorrect && <FormControl.Static>username ან პაროლი არასწორია</FormControl.Static>}
             </FormGroup>
         );

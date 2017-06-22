@@ -25,13 +25,15 @@ class App extends Component {
     constructor(props) {
         super(props);
 
+        const uploaderRoleInStorage = window.localStorage.getItem("uploader");
+
         this.state = {
             signInOpened: false,
             signUpOpened: false,
 
-            isUploader: true,
-            isUserSignIn: true,
-            username: '',
+            isUploader: uploaderRoleInStorage !== null && uploaderRoleInStorage,
+            isUserSignIn: window.localStorage.getItem("user") !== null,
+            username: window.localStorage.getItem("user"),
 
             topicUploadOpen: false,
             taskUploadOpen: false,
@@ -59,6 +61,10 @@ class App extends Component {
 
     handleSignOut = () => {
         this.setState({ isUserSignIn: false });
+
+        window.localStorage.removeItem("token");
+        window.localStorage.removeItem("user");
+        window.localStorage.removeItem("id");
     }
 
 
@@ -103,10 +109,24 @@ class App extends Component {
         this.setState({ taskUploadOpen: false });
     }
 
+    onSuccess = (userToken) => {
+        window.localStorage.setItem("token", userToken);
+        console.log(window.localStorage.getItem("token"));
 
+        const userDataStr = atob(userToken.split('.')[1]);
+        const userDataJson = JSON.parse(userDataStr);
+        window.localStorage.setItem("user", userDataJson.username);
+        window.localStorage.setItem("id", userDataJson.id);
 
-    onSuccess = (user) => {
-        alert(user.username);
+        var uploader = false;
+        for (var i = 0; i < userDataJson.roles.length; i++){
+            if (userDataJson.roles[i] === 'uploader') {
+                uploader = true;
+            }
+        }
+
+        // // {"roles":["user"],"iss":"issuer","id":3,"exp":1500735644,"username":"as"}
+        this.setState({ isUserSignIn: true, isUploader: uploader });
     }
 
     render() {
@@ -115,7 +135,7 @@ class App extends Component {
             <BrowserRouter>
                 <div>
                     <MyNavbar   isSigned={this.state.isUserSignIn} isUploader={this.state.isUploader} 
-                                signOutHandle={this.signOutHandle} username={this.state.username}
+                                signOutHandle={this.handleSignOut}
                                 right_menu1="ავტორიზაცია" right_menu2="რეგისტრაცია" 
                                 onSignInShow={this.onSignInOpen} onSignUpShow={this.onSignUpOpen}
                                 onTopicUploadClick={this.topicUploadOpenHandler} onTaskUploadClick={this.taskUploadOpenHandler}

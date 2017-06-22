@@ -81,7 +81,7 @@ class IncorrectInputs extends Component {
     render (){
         return (
             <FormGroup validationState="error" style={{color: 'red'}} >
-                        {this.props.incorrect && <FormControl.Static>username ან პაროლი არასწორია</FormControl.Static>}
+                        {this.props.incorrect && <FormControl.Static style={{fontSize: '16px'}} >username ან პაროლი არასწორია</FormControl.Static>}
             </FormGroup>
         );
     }

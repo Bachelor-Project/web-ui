@@ -3,7 +3,7 @@ import './toggleMenuStyle.css';
 import React, {Component} from 'react';
 import {FormGroup, ControlLabel, FormControl, HelpBlock, InputGroup} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
-import {slide as Menu} from 'react-burger-menu';
+import {elastic as Menu} from 'react-burger-menu';
 import {Treebeard} from 'react-treebeard';
 
 
@@ -110,7 +110,7 @@ export class ToggleMenu extends Component {
 
     render() {
         return (
-            <Menu width={ '16%' } styles={menuStyle}>
+            <Menu width={ '16%' } styles={menuStyle} pageWrapId={ "page-wrap" } outerContainerId={ "outer-container" } >
                     <Treebeard 
                         data={this.props.treeData}
                         onToggle={this.onToggle}

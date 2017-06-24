@@ -11,7 +11,6 @@ class TableCustomRow extends Component {
 			<tr>
 				<td>{this.props.index}</td>
 				<td><LinkComponent to={this.props.path + '/' + this.props.data.id} label={this.props.data.name} /></td>
-				<td>{this.props.data.descrip}</td>
 				<td>{this.props.data.number}</td>
 			</tr>
 		);

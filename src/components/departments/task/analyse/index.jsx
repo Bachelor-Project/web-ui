@@ -62,6 +62,7 @@ class TaskAnalyzer extends Component {
 
 
 	render (){
+		const isSigned = window.localStorage.getItem("token") !== null;
 		const listComments = this.state.comments.map((comment) => {
 			return (
 					<Media key={comment.id} >
@@ -74,13 +75,13 @@ class TaskAnalyzer extends Component {
 		});
 
 		return (
-			<div>
+			<div style={{marginBottom: '2%'}} >
 				{listComments}
-				<div style={{border: '2px dotted black', padding: '8px', marginTop: '16px', borderTop: 'none'}} >
+				{isSigned && <div style={{border: '2px dotted black', padding: '8px', marginTop: '16px', borderTop: 'none'}} >
 					<textarea rows="10" style={{width: '100%'}} id="analyse-input" placeholder="შეიყვანეთ ტექსტი" />
 					<Button onClick={this.onPublishClick} 
 							style={{width: '80%', margin: '0px 10%'}} > გამოქვეყნება</Button>
-				</div>
+				</div>}
 			</div>
 		);
 	}

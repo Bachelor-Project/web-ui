@@ -21,10 +21,6 @@ const languages = [
 		id: 3,
 		descrip: 'Python 2.7' 
 	},
-	{
-		id: 4,
-		descrip: 'Pascal'
-	}
 ];
 
 
@@ -72,9 +68,7 @@ export default class TaskUploadModal extends Component {
 				</Modal.Header>
 				<Modal.Body>
 					<form >
-						<FieldGroup id="conditionFormGr" label="აირჩიეთ ამოცანის ფაილი" inputID="task-file" type="file" />
-						<FieldGroup id="testFormGr" label="აირჩიეთ ტესტების ფაილის არქივი" type="file" />
-						<FieldGroup id="hinterFormGr" label="აირჩიეთ მითითებების ფაილი" type="file" />
+						<FieldGroup id="task-file" label="აირჩიეთ ამოცანის მონაცემების არქივი" type="file" />
 						<Selector title="შეიძლება დაიწეროს:" selectorData={languages} isMultiple={true} searchable={true} 
 									controlId="task-upload-supported-languages" />
 						<Selector title="თემა" selectorData={this.props.mainTopics} isMultiple={true} searchable={true} 
@@ -92,4 +86,8 @@ export default class TaskUploadModal extends Component {
 		);
 	}
 }
+
+
+// <FieldGroup id="tests-file" label="აირჩიეთ ტესტების ფაილის არქივი" type="file" />
+// <FieldGroup id="hinter-file" label="აირჩიეთ მითითებების ფაილი" type="file" />
 

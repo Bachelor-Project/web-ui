@@ -281,15 +281,17 @@ class TaskDep extends Component {
 
 
 	render (){
+		const isSigned = window.localStorage.getItem("token") !== null;
+
 		return (
-			<div style={{marginTop: '4%'}} >
+			<div style={{marginTop: '4%'}} id="outer-container" >
 				<ToggleMenu treeData={treeData} nodeChangeHandler={this.handleTaskChange} />
 				
-				<div className="container" >
+				<div className="container" id="page-wrap">
 					<ControlledTabs id={taskDataTabID} tabs={taskTabs} hasAspectRatioHeight={true}/>
 					<div className="divider" style={{height: '20px', borderTop: '2px solid #e0ebeb'}} ></div>
 					<ControlledTabs id={solutionDataTabID} tabs={solutionTabs} hasAspectRatioHeight={false}/>
-					<Hinter id={hinterID} hinters={hinters} />
+					{isSigned && <Hinter id={hinterID} hinters={hinters} />}
 				</div>
 			</div>
 		);

@@ -74,6 +74,8 @@ class TaskSolution extends Component {
 	}
 
 	render (){
+		const isSigned = window.localStorage.getItem("token") !== null;
+
 		const languages = this.props.taskLanguages.map((lang) => {
 							return (<option key={lang.id} value={lang.id} id={'lang-' + lang.id} >{lang.descrip}</option>);
 						});
@@ -84,7 +86,7 @@ class TaskSolution extends Component {
 		return (
 			<div>
 				<div style={{position: 'relative'}} >
-					<Button onClick={this.onCompileClick} style={{margin: "8px"}}>
+					<Button onClick={this.onCompileClick} style={{margin: "8px"}} disabled={!isSigned} >
 								{labels.compileButton}</Button>
 					<Button onClick={this.onRunClick} style={{margin: "8px"}} disabled={disabledRun} >
 								{labels.runButton}</Button>

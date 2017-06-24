@@ -6,25 +6,22 @@ import TopicDep from '../departments/topic/TopicDep';
 
 
 
-const headers = ['N', 'თემის დასახელება', 'აღწერა', 'რაოდენობა'];
+const headers = ['N', 'თემის დასახელება', 'რაოდენობა'];
 
 const topics = [
 	{
 		id: 1,
 		name: 'გრაფი',
-		descrip: 'bla bla',
 		number: '30'
 	},
 	{
 		id: 2,
 		name: 'გეომეტრია',
-		descrip: 'blu blu',
 		number: '35'
 	},
 	{
 		id: 3,
 		name: 'ალგებრა',
-		descrip: 'ble ble',
 		number: '50'
 	}
 ];

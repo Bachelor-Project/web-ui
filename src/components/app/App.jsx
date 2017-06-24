@@ -65,6 +65,8 @@ class App extends Component {
         window.localStorage.removeItem("token");
         window.localStorage.removeItem("user");
         window.localStorage.removeItem("id");
+        window.localStorage.removeItem("uploader");
+
     }
 
 
@@ -83,8 +85,12 @@ class App extends Component {
     // connect to server and fetch all needed data:
     fetchTaskModalData = () => {
         $.ajax({
-            url: '/task/api/main_topics',
+            url: '/bp_apigatway/api',
             type: 'GET',
+            data: {
+                url: "http://localhost:8080/task/api/main_topics",
+                memType: "application/json"
+            },
             success: (data) => {
                         this.setState({ mainTopics: data });
                     },
@@ -93,8 +99,12 @@ class App extends Component {
         });
 
         $.ajax({
-            url: '/task/api/levels',
+            url: '/bp_apigatway/api',
             type: 'GET',
+            data: {
+                url: "http://localhost:8080/task/api/levels",
+                memType: "application/json"
+            },
             success: (data) => {
                         this.setState({ levels: data });
                     },
@@ -111,7 +121,6 @@ class App extends Component {
 
     onSuccess = (userToken) => {
         window.localStorage.setItem("token", userToken);
-        console.log(window.localStorage.getItem("token"));
 
         const userDataStr = atob(userToken.split('.')[1]);
         const userDataJson = JSON.parse(userDataStr);
@@ -122,6 +131,7 @@ class App extends Component {
         for (var i = 0; i < userDataJson.roles.length; i++){
             if (userDataJson.roles[i] === 'uploader') {
                 uploader = true;
+                 window.localStorage.setItem("uploader", true);
             }
         }
 

@@ -35,11 +35,13 @@ export default class SignInModal extends Component {
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(requestJson)
         })
-        .then(function(response){
-                this.props.onSuccessAction(response);
+        .then(function(responseUser, statusText, xhr){
+            console.log('success  ssss', xhr.getResponseHeader('x-token'));
+                this.props.onSuccessAction(responseUser, xhr.getResponseHeader('x-token'));
                 this.onHideAction();
             }.bind(this))
         .catch(function(error){
+                console.log(error);
                 if (error.status == 400){
                     this.setState({ isInputIncorrect: true });
                 }

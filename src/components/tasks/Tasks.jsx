@@ -33,7 +33,7 @@ class Tasks extends Component {
 		return (
 			<Switch>
 				<Route exact path={taskPath} render={() => (<GeneralTable path={taskPath} pageTitle="ამოცანები" headData={headers} bodyData={tasks} />)} />
-				<Route path={taskPath + '/:taskId'} component={TaskDep} />
+				<Route path={taskPath + '/:mainTopicId'} component={TaskDep} />
 			</Switch>
 		);
 	}

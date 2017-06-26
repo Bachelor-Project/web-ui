@@ -119,11 +119,19 @@ class App extends Component {
         this.setState({ taskUploadOpen: false });
     }
 
-    onSuccess = (userToken) => {
-        window.localStorage.setItem("token", userToken);
+    decodeUnicode(str) {
+        return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    }
 
-        const userDataStr = atob(userToken.split('.')[1]);
-        const userDataJson = JSON.parse(userDataStr);
+
+    onSuccess = (userDataJson, token) => {
+
+        window.localStorage.setItem("token", token);
+
+        // const userDataStr = this.decodeUnicode(userToken.split('.')[1]);
+        // const userDataJson = JSON.parse(userDataStr);
         window.localStorage.setItem("user", userDataJson.username);
         window.localStorage.setItem("id", userDataJson.id);
 

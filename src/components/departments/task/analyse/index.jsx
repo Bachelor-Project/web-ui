@@ -51,15 +51,37 @@ class TaskAnalyzer extends Component {
 		}
 	}
 
+	componentDidMount() {
+		const tID = window.localStorage.getItem("taskID");
+		$.get("/bp_analyzer/api/comments/" + tID, this.getCallBack);
+	}
+
+	getCallBack = (data, status) => {
+		this.setState({ comments: data });
+	}
+
 	onPublishClick = () => {
 		var currComments = this.state.comments.slice();
 		let text = $("#analyse-input").val();
-		if (text.length() > 0){
-			currComments.push({ user: 'user_new', text: $("#analyse-input").val() });
+		if (text.length > 0){
+			var user = window.localStorage.getItem("user");
+			currComments.push({ id: currComments.length + 1, username: user, text: text });
 			this.setState({ comments: currComments });
+			var requestJson = {};
+			requestJson.username = user;
+			requestJson.text = text;
+			requestJson.taskId = window.localStorage.getItem("taskID");
+
+			$.ajax({
+	            url: '/bp_analyzer/api/comment',
+	            method: 'post',
+	            contentType: "application/json; charset=utf-8",
+	            data: JSON.stringify(requestJson)
+	        });
+
+            $("#analyse-input").val("");
 		}
 	}
-
 
 	render (){
 		const isSigned = window.localStorage.getItem("token") !== null;
@@ -67,7 +89,7 @@ class TaskAnalyzer extends Component {
 			return (
 					<Media key={comment.id} >
 						<Media.Body>
-							<Media.Heading>{comment.user}</Media.Heading>
+							<Media.Heading>{comment.username}</Media.Heading>
 							<Paragraphs text={comment.text} /> 
 						</Media.Body>
 					</Media>

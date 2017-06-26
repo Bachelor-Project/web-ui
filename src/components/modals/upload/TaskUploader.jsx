@@ -34,13 +34,14 @@ export default class TaskUploadModal extends Component {
 		var data = new FormData();
 
 		data.append('file', $(':file')[0].files[0]);
+		// data.append();
 
 		$.ajax({
-	        url: '/task/api/upload',
+	        url: '/file_upload/rest/files/upload',
 	        type: 'POST',
 	        data: data,
 	        processData: false,
-	        // contentType: false,
+	        contentType: 'multipart/form-data',
 	        dataType: 'text/plain',
 	        success: function (data, textStatus, xhr) {
 			            alert(data);
@@ -69,6 +70,8 @@ export default class TaskUploadModal extends Component {
 				<Modal.Body>
 					<form >
 						<FieldGroup id="task-file" label="აირჩიეთ ამოცანის მონაცემების არქივი" type="file" />
+						<FieldGroup id="time-limit" label="დროის ლიმიტი (წმ)" type="number" />
+						<FieldGroup id="time-limit" label="მეხსიერების ლიმიტი (მგ)" type="number" />
 						<Selector title="შეიძლება დაიწეროს:" selectorData={languages} isMultiple={true} searchable={true} 
 									controlId="task-upload-supported-languages" />
 						<Selector title="თემა" selectorData={this.props.mainTopics} isMultiple={true} searchable={true} 

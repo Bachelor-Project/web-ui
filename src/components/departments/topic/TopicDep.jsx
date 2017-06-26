@@ -48,7 +48,6 @@ class TopicDep extends Component {
 	constructor(props) {
 		super(props);
 
-		super(props);
         this.state = {
         	topicTitle: 'bla',
         	topicId: 1,
@@ -380,6 +379,7 @@ class TopicHeader extends Component {
 		var data = new FormData();
 		data.append('user', window.localStorage.algoUser);
 		data.append('topic', this.state.topicId);
+		
 		// $.ajax({
 		// 	url: '/apigatway/to/users/api/bookmark',
 		// 	type: 'POST',

@@ -6,6 +6,7 @@ import TaskAnalyzer from './analyse';
 import ControlledTabs from './ControlledTabs';
 import Hinter from './hint';
 import {ToggleMenu} from '../../generals/helpers/Components';
+import $ from 'jquery';
 
 
 // -----------------------------------  Start Variables -----------------------------------
@@ -270,6 +271,14 @@ class TaskDep extends Component {
 		this.setState({ headerTarget: hinterID });
 	}
 
+	componentDidMount() {
+		// $.get('', this.getAllTaskCallback);
+	}
+
+	getAllTaskCallback = (data, status) => {
+
+	}
+
 
 	// Change task from left menu:
 	handleTaskChange = (node) => {
@@ -277,20 +286,23 @@ class TaskDep extends Component {
 
 		alert("გადმოსაწერია ამოცანა id-ით " + node.id + " პირობით, ტესტებით, მითითებებით და ყველაფრით ");
 		this.setState({ taskId: node.id, taskContent: 'task content of ' + node.name });
+		window.localStorage.setItem("taskID", node.id);
 	}
 
 
 	render (){
+		alert("mainTopicId " + this.props.match.params.mainTopicId);
+		window.localStorage.setItem("taskID", 2);
+		
 		const isSigned = window.localStorage.getItem("token") !== null;
-
 		return (
 			<div style={{marginTop: '4%'}} id="outer-container" >
 				<ToggleMenu treeData={treeData} nodeChangeHandler={this.handleTaskChange} />
 				
 				<div className="container" id="page-wrap">
-					<ControlledTabs id={taskDataTabID} tabs={taskTabs} hasAspectRatioHeight={true}/>
+					<ControlledTabs id={taskDataTabID} tabs={taskTabs} hasAspectRatioHeight={true} />
 					<div className="divider" style={{height: '20px', borderTop: '2px solid #e0ebeb'}} ></div>
-					<ControlledTabs id={solutionDataTabID} tabs={solutionTabs} hasAspectRatioHeight={false}/>
+					<ControlledTabs id={solutionDataTabID} tabs={solutionTabs} hasAspectRatioHeight={false} />
 					{isSigned && <Hinter id={hinterID} hinters={hinters} />}
 				</div>
 			</div>

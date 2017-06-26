@@ -54,12 +54,11 @@ export default class SignUpModal extends Component {
 			contentType: "application/json; charset=utf-8",
 			data: JSON.stringify(data),
 		})
-		.then(function(response){
-					this.props.onSuccessAction(response);
+		.then(function(responseUser, statusText, xhr){
+					this.props.onSuccessAction(responseUser, xhr.getResponseHeader('x-token'));
 					this.onHideAction();
 				}.bind(this) )
 		.catch(function(error){
-					alert(JSON.stringify(error));
 					const responseAsJSON = error.responseJSON;
 					if (responseAsJSON.status == 400){
 						for (var i = 0; i < responseAsJSON.length; i++){

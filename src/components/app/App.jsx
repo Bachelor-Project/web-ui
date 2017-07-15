@@ -19,6 +19,17 @@ const routerPathes = {
     tasks: '/tasks'
 }
 
+const topics = [
+    {
+        id: 1,
+        name: "ელემენტარული",
+    },
+    {
+        id: 2,
+        name: "საოლიმპიადო",
+    },
+];
+
 
 class App extends Component {
 
@@ -31,8 +42,8 @@ class App extends Component {
             signInOpened: false,
             signUpOpened: false,
 
-            isUploader: uploaderRoleInStorage !== null && uploaderRoleInStorage,
-            isUserSignIn: window.localStorage.getItem("user") !== null,
+            isUploader: true, // uploaderRoleInStorage !== null && uploaderRoleInStorage,
+            isUserSignIn: true, //window.localStorage.getItem("user") !== null,
             username: window.localStorage.getItem("user"),
 
             topicUploadOpen: false,
@@ -72,6 +83,7 @@ class App extends Component {
 
     topicUploadOpenHandler = () => {
         this.setState({ topicUploadOpen: true });
+        this.fetchMainTopics();
     }
     topicUploadClose = () => {
         this.setState({ topicUploadOpen: false });
@@ -84,25 +96,12 @@ class App extends Component {
     }
     // connect to server and fetch all needed data:
     fetchTaskModalData = () => {
+        this.fetchMainTopics();
         $.ajax({
             url: '/bp_apigatway/api',
             type: 'GET',
             data: {
-                url: "http://localhost:8080/task/api/main_topics",
-                memType: "application/json"
-            },
-            success: (data) => {
-                        this.setState({ mainTopics: data });
-                    },
-            dataType: 'json',
-            cache: false
-        });
-
-        $.ajax({
-            url: '/bp_apigatway/api',
-            type: 'GET',
-            data: {
-                url: "http://localhost:8080/task/api/levels",
+                url: "http://localhost:8080/files_data/api/levels",
                 memType: "application/json"
             },
             success: (data) => {
@@ -112,6 +111,22 @@ class App extends Component {
             cache: false
         });
 
+    }
+
+    fetchMainTopics = () => {
+        $.ajax({
+            url: '/bp_apigatway/api',
+            type: 'GET',
+            data: {
+                url: "http://localhost:8080/files_data/api/main_topics",
+                memType: "application/json"
+            },
+            success: (data) => {
+                        this.setState({ mainTopics: data });
+                    },
+            dataType: 'json',
+            cache: false
+        });
     }
 
 
@@ -163,10 +178,12 @@ class App extends Component {
 
                     <SignInModal show={this.state.signInOpened} title="ავტორიზაცია" onHide={this.onSignInClose} onSuccessAction={this.onSuccess} />
                     <SignUpModal show={this.state.signUpOpened} title="რეგისტრაცია" onHide={this.onSignUpClose} onSuccessAction={this.onSuccess} />
-                    <CustomUploadModal title="თემის ატვირთვა" show={this.state.topicUploadOpen} onHide={this.topicUploadClose} body={<TopicUploadModal />} />
+                    <TopicUploadModal title="თემის ატვირთვა" show={this.state.topicUploadOpen} onHide={this.topicUploadClose} 
+                                        types={topics} mainTopics={this.state.mainTopics} />
                     <TaskUploadModal title="ამოცანის ატვირთვა" show={this.state.taskUploadOpen} onHide={this.taskUploadClose}
                                         levels={this.state.levels} mainTopics={this.state.mainTopics} />
 
+                    {/* <CustomUploadModal title="თემის ატვირთვა" show={this.state.topicUploadOpen} onHide={this.topicUploadClose} body={<TopicUploadModal />} /> */}
                     {/* <CustomUploadModal title="ამოცანის ატვირთვა" show={this.state.taskUploadOpen} onHide={this.taskUploadClose} body={<TaskUploadModal />} /> */}
                 </div>
             </BrowserRouter>

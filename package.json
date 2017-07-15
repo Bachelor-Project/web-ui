@@ -4,8 +4,11 @@
   "private": true,
   "dependencies": {
     "brace": "^0.10.0",
+    "http": "0.0.0",
+    "http_request": "^0.1.2",
     "jquery": "^3.2.1",
     "jquery-file-upload": "^4.0.5",
+    "multi-part": "^2.0.0",
     "rc-menu": "^5.0.10",
     "react": "^15.5.4",
     "react-ace": "^5.0.1",

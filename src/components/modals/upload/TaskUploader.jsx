@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
-import {FieldGroup, Selector} from '../../generals/helpers/Components';
 import {Modal, Button} from 'react-bootstrap';
+
+import {FieldGroup, Selector} from '../../generals/helpers/Components';
 import $ from 'jquery';
+import Multipart from 'multi-part';
+import http from 'http';
+import httpRequest from 'http_request';
 
 
 const languages = [
@@ -29,24 +33,48 @@ export default class TaskUploadModal extends Component {
 
 
 	onUploadClick = () => {
-		alert("Upload");
-
-		var data = new FormData();
+		var data = new Multipart();
 
 		data.append('file', $(':file')[0].files[0]);
+		alert($(':file')[0].files.length);
 		// data.append();
+		// url: '/file_upload/rest/files/upload',
 
-		$.ajax({
-	        url: '/file_upload/rest/files/upload',
-	        type: 'POST',
-	        data: data,
-	        processData: false,
-	        contentType: 'multipart/form-data',
-	        dataType: 'text/plain',
-	        success: function (data, textStatus, xhr) {
-			            alert(data);
-			        }
+		httpRequest.request('http://localhost:8080/bp_apigatway/api/upload', {
+			method: 'POST',
+			body: data,
+			headers: data.getHeaders(),
+			dataType: 'text/plain'		
+		}).then(function(response) {
+			// get the response body
+			response.getBody();
+			
+			// get the response headers
+			response.getHeaders();
+			
+			// get specific response header
+			response.getHeader('Accept');
+			
+			// get the code
+			response.getCode();
+
+			alert("rame");
 		});
+
+		// data.stream().pipe(http.request({ headers: data.getHeaders(), hostname: '127.0.0.1', port: 3000, method: 'POST' }));
+
+		// $.ajax({
+	 //        url: '/bp_apigatway/api/upload',
+	 //        type: 'POST',
+	 //        data: data,
+	 //        processData: false,
+	 //        contentType: 'multipart/form-data',
+	 //        dataType: 'text/plain',
+	 //        success: function (data, textStatus, xhr) {
+		// 	            alert(data);
+		// 	        }
+		// });
+
 
 		// $("#task-file").fileUpload({
 		// 	url: '/task/api/upload',

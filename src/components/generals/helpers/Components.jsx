@@ -56,6 +56,7 @@ export class Selector extends Component {
 
 
     render() {
+        alert(this.props.selectorData.length);
         const lowerCaseSearchVal = this.state.searchValue.toLowerCase();
         const options = this.props.selectorData.map( function(elem, index){
             if (lowerCaseSearchVal && !elem.toLowerCase().includes(lowerCaseSearchVal)) return null;

@@ -31,8 +31,20 @@ const languages = [
 
 export default class TaskUploadModal extends Component {
 
+	constructor(props) {
+		super(props);
 
-	onUploadClick = () => {
+		this.state = {
+			mainTopicSelected: false,
+		}
+	}
+
+
+	onUploadClick = (e) => {
+		if (this.fileInput.files.length == 0 || !this.timeInput.value || !this.memoryInput.value || !this.state.mainTopicSelected){
+			alert("შეავსეთ ყველა ველი");
+			e.preventDefault();
+		}
 
 		// var data = new Multipart();
 
@@ -87,7 +99,9 @@ export default class TaskUploadModal extends Component {
 		// });
 	}
 
-
+	onMainTopicSelected = (value) => {
+		this.setState({ mainTopicSelected: value.length !== 0 });
+	}
 
 
 	render(){
@@ -103,8 +117,8 @@ export default class TaskUploadModal extends Component {
 				<Modal.Body>
 					<form action="/bp_apigatway/api/uploadTask" method="post" encType="multipart/form-data">
 				        ამოცანის მონაცემების არქივი: <input style={{display: 'inline'}} type="file" name="file" ref={input => this.fileInput = input} /> <br /><br />
-					   	<input type="number" placeholder="დროის ლიმიტი (წმ.)" />
-					   	<input type="number" placeholder="მეხსიერების ლიმიტი (მბ.)" /><br/><br/>
+					   	<input type="number" placeholder="დროის ლიმიტი (წმ.)" ref={input => this.timeInput = input} />
+					   	<input type="number" placeholder="მეხსიერების ლიმიტი (მბ.)" ref={input => this.memoryInput = input} /><br/><br/>
 					   	<FormSelector options={this.props.mainTopics} onSelected={this.onMainTopicSelected} /><br />
 					   	დონე: <select>{levels}</select><br /><br />
 					   	

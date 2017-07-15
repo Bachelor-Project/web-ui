@@ -78,6 +78,44 @@ export class Selector extends Component {
     }
 }
 
+export class FormSelector extends Component {
+
+    constructor(props){
+        super(props);
+
+        this.state = {
+            textFieldDisabled: true,
+            selectorDisabled: true
+        }
+    }
+
+    onNewClick = (e) => {
+        this.setState({ textFieldDisabled: false, selectorDisabled: true })
+    }
+
+    onExistedClick = (e) => {
+        this.setState({ textFieldDisabled: true, selectorDisabled: false })
+    }
+
+    onValueChange = (e) => {
+        this.props.onSelected(e.target.value);
+    }
+
+    render() {
+        return (
+            <div>
+                <input type="radio" name="mainTopicRadio" onClick={this.onNewClick} />
+                ახალი: <input type="text" placeholder="მთავარი თემა" 
+                            disabled={this.state.textFieldDisabled} onChange={this.onValueChange} /><br/>
+                <input type="radio" name="mainTopicRadio" onClick={this.onExistedClick} />
+                არსებული: <select name="mainTopic" disabled={this.state.selectorDisabled} onChange={this.onValueChange}>
+                                {this.props.options}
+                            </select>
+            </div>
+        );
+    }
+}
+
 
 const menuStyle = {
     bmBurgerButton: {

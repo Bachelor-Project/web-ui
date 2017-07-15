@@ -19,6 +19,7 @@ const routerPathes = {
     tasks: '/tasks'
 }
 
+// აღარ ვიყენებთ.
 const topics = [
     {
         id: 1,
@@ -179,7 +180,7 @@ class App extends Component {
                     <SignInModal show={this.state.signInOpened} title="ავტორიზაცია" onHide={this.onSignInClose} onSuccessAction={this.onSuccess} />
                     <SignUpModal show={this.state.signUpOpened} title="რეგისტრაცია" onHide={this.onSignUpClose} onSuccessAction={this.onSuccess} />
                     <TopicUploadModal title="თემის ატვირთვა" show={this.state.topicUploadOpen} onHide={this.topicUploadClose} 
-                                        types={topics} mainTopics={this.state.mainTopics} />
+                                        mainTopics={this.state.mainTopics} />
                     <TaskUploadModal title="ამოცანის ატვირთვა" show={this.state.taskUploadOpen} onHide={this.taskUploadClose}
                                         levels={this.state.levels} mainTopics={this.state.mainTopics} />
 

@@ -1,0 +1,83 @@
+import React, {Component} from 'react';
+import {Modal} from 'react-bootstrap';
+import $ from 'jquery';
+
+import {FormSelector} from '../../generals/helpers/Components';
+
+
+function TopicsPrioritySelector(props) {
+	var options = props.data.map((elem) => {
+		return (<option key={elem.id} value={elem.value} >{elem.value}</option>);
+	});
+	return (<select>
+				{options}
+			</select>);
+}
+
+
+export default class TopicUploadModal extends Component {
+
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			isMainTopicNew: false,
+			selectedMainTopic: '',
+			priorities: []
+		}
+	}
+
+
+	onMainTopicSelected = (value, isNew) => {
+		this.setState({ selectedMainTopic: value, isMainTopicNew: isNew });
+		if (!isNew){
+			this.fetchPrioritiesFor(value);
+		}
+	}
+
+	onUploadClick = (e) => {
+		// if (this.fileInput.files.length == 0 || !this.state.selectedMainTopic || !this.priorityInput.value){
+		// 	alert("შეავსეთ ყველა ველი");
+		// 	e.preventDefault();
+		// }
+	}
+
+	fetchPrioritiesFor = (mainTopic) => {
+        $.ajax({
+            url: '/priorities',
+            type: 'GET',
+            data: {
+                main_topic: mainTopic,
+            },
+            success: (data) => {
+                        var prioritiesData = data.map((elem) => {
+                                                var value = elem.descrip + " " + elem.priority;
+                                                console.log(value);
+                                                return {'id': elem.id, 'value': value};
+                                            });
+                        this.setState({ priorities: prioritiesData });
+                    },
+            dataType: 'json',
+            cache: false
+        });
+    }
+
+	render (){
+		return (
+			<Modal show={this.props.show} onHide={this.props.onHide}>
+				<Modal.Header closeButton>
+					<Modal.Title >{this.props.title}</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<form action="/uploadTopic" method="post" encType="multipart/form-data" encode="utf8" >
+				        თემა: <input style={{display: 'inline'}} type="file" name="file" ref={input => this.fileInput = input} /> <br /><br />
+					   	<FormSelector options={this.props.mainTopics} onSelected={this.onMainTopicSelected} /><br />
+					   	<input type="number" name="priority" placeholder="პრიორიტეტი" ref={input => this.priorityInput = input} />
+					   	<TopicsPrioritySelector data={this.state.priorities} /><br /><br />
+					   	<input type="submit" value="ატვირთვა" onClick={this.onUploadClick} />
+					</form>
+				</Modal.Body>
+			</Modal>
+		);
+	}
+}

@@ -1,0 +1,42 @@
+import React, {Component} from 'react';
+import {Route, Switch} from 'react-router-dom';
+
+import GeneralTable from '../generals/table/GeneralTable';
+import TaskDep from '../departments/task/TaskDep';
+
+
+const headers = ['N', 'ამოცანის თემა', 'რაოდენობა'];
+
+const tasks = [
+	{
+		id: 1,
+		name: 'გრაფი',
+		number: '10'
+	},
+	{
+		id: 2,
+		name: 'გეომეტრია',
+		number: '15'
+	},
+	{
+		id: 3,
+		name: 'ალგებრა',
+		number: '9'
+	}
+];
+
+class Tasks extends Component {
+
+	render (){
+		const taskPath = this.props.path;
+
+		return (
+			<Switch>
+				<Route exact path={taskPath} render={() => (<GeneralTable path={taskPath} pageTitle="ამოცანები" headData={headers} bodyData={tasks} />)} />
+				<Route path={taskPath + '/:mainTopicId'} component={TaskDep} />
+			</Switch>
+		);
+	}
+}
+
+export default Tasks;

@@ -97,21 +97,25 @@ export class FormSelector extends Component {
         this.setState({ textFieldDisabled: true, selectorDisabled: false })
     }
 
-    onValueChange = (e) => {
-        this.props.onSelected(e.target.value, !this.state.textFieldDisabled);
+    onTextFieldChange = (e) => {
+        this.props.onSelectedNew(e.target.value);
+    }
+
+    onSelectorChange = (e) => {
+        this.props.onSelectedExisted(e.target.value);
     }
 
     render() {
         const options = this.props.options.map((elem) => {
-            return (<option key={elem.id} value={elem.descrip} >{elem.descrip}</option>);
+            return (<option key={elem.id} value={elem.id} >{elem.descrip}</option>);
         });
         return (
             <div>
                 <input type="radio" name="mainTopicRadio" onClick={this.onNewClick} />
                 ახალი: <input type="text" placeholder="მთავარი თემა" name="mainTopic"
-                            disabled={this.state.textFieldDisabled} onChange={this.onValueChange} /><br/>
+                            disabled={this.state.textFieldDisabled} onChange={this.onTextFieldChange} /><br/>
                 <input type="radio" name="mainTopicRadio" onClick={this.onExistedClick} />
-                არსებული: <select name="mainTopic" disabled={this.state.selectorDisabled} onChange={this.onValueChange}>
+                არსებული: <select name="mainTopic" disabled={this.state.selectorDisabled} onChange={this.onSelectorChange}>
                                 {options}
                             </select>
             </div>
@@ -136,12 +140,15 @@ export class ToggleMenu extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {}
+        this.state = {
+            cursor: null
+        }
     }
 
     onToggle = (node, toggled) => {
         if(this.state.cursor){
-            this.state.cursor.active = false;
+            // this.state.cursor.active = false;
+            this.setState({cursor: {active: false}});
         }
         node.active = true;
         if(node.children){ node.toggled = toggled; }

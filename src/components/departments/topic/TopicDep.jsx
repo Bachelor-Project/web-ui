@@ -6,40 +6,10 @@ import {ToggleMenu} from '../../generals/helpers/Components';
 
 
 
-
-const treeData = {
-	name: 'გრაფი',
+const mainTopicTreeData = {
+	name: '',
 	toggled: true,
-	children: 	[
-					{
-						name: 'ტიპი 1',
-						toggled: true,
-						children: 	[
-										{
-											id: 1,
-											name: 'თემა 1.1'
-										},
-										{
-											id: 2,
-											name: 'თემა 1.2'
-										}
-									]
-					},
-					{
-						name: 'ტიპი 2',
-						toggled: true,
-						children: 	[
-										{
-											id: 3,
-											name: 'თემა 2.1',
-										},
-										{
-											id: 4,
-											name: 'თემა 2.2'
-										}
-									]
-					}
-				]
+	children: 	[]
 }
 
 
@@ -49,17 +19,67 @@ class TopicDep extends Component {
 		super(props);
 
         this.state = {
-        	topicTitle: 'bla',
-        	topicId: 1,
+        	topicTitle: '',
+        	topicId: 0,
         	topicContent: 'content of topic',
 
-        	bookmarkedId: 0
+        	bookmarkedId: 0,
+
+        	cursor: null
         };
-        this.onToggle = this.onToggle.bind(this);
+        // this.onToggle = this.onToggle.bind(this);
+	}
+
+	componentDidMount() {
+		this.fetchMainTopicsContent();
+	}
+
+	fetchMainTopicsContent = () => {
+		var mainTopicID = this.props.match.params.mainTopicId;
+
+		this.fetchMainTopicName(mainTopicID);
+		this.fetchMainTopicTopics(mainTopicID);
+	}
+
+	fetchMainTopicName = (mainTopicID) => {
+		$.ajax({
+            url: '/name_main_topic',
+            type: 'GET',
+            data: {
+                id: mainTopicID,
+            },
+            success: (data) => {
+            			console.log(data);
+                        mainTopicTreeData.name = data;
+                    },
+            dataType: 'text',
+            cache: false
+        });
+	}
+
+	fetchMainTopicTopics = (mainTopicID) => {
+		$.ajax({
+            url: '/priorities',
+            type: 'GET',
+            data: {
+                main_topic: mainTopicID,
+            },
+            success: (data) => {
+                        var prioritiesData = data.map((elem) => {
+                                                return {'id': elem.id, 'name': elem.descrip};
+                                            });
+                        mainTopicTreeData.children = prioritiesData;
+                    },
+            dataType: 'json',
+            cache: false
+        });
 	}
 
 	onToggle = (node, toggled) => {
-        if(this.state.cursor){this.state.cursor.active = false;}
+        if(this.state.cursor){
+        	// this.state.cursor.active = false;
+        	this.setState({ cursor: {active: false} });
+        }
         node.active = true;
         if(node.children){ node.toggled = toggled; }
         this.setState({ cursor: node,  topicTitle: node.name, topicId: node.id, topicContent: 'topic content ' + node.name});
@@ -74,7 +94,7 @@ class TopicDep extends Component {
 	}
 
 	onBookmarkClick = () => {
-		alert('user: ' + 'vinme' + ' topic_id: ' + this.state.topicId);
+		alert('user: vinme topic_id: ' + this.state.topicId);
 
 		var data = new FormData();
 		data.append('user', window.localStorage.algoUser);
@@ -90,7 +110,8 @@ class TopicDep extends Component {
 	}
 
 	onDownloadClick = () => {
-		alert('user: ' + 'vinme' + ' ჩამოტვირთავს თემას: ' + this.state.topicTitle);
+		var user = 'vinme;'
+		alert('user: ' + user + ' ჩამოტვირთავს თემას: ' + this.state.topicTitle);
 	}
 
 
@@ -99,7 +120,7 @@ class TopicDep extends Component {
 
 		return (
 			<div id="outer-container" >
-				<ToggleMenu treeData={treeData} nodeChangeHandler={this.handleTopicChange} />
+				<ToggleMenu treeData={mainTopicTreeData} nodeChangeHandler={this.handleTopicChange} />
 
 				<main id="page-wrap" > 
 					<div style={{borderBottom: '2px solid black', 
@@ -111,255 +132,6 @@ class TopicDep extends Component {
 					
 					<div style={{margin: '2px 4% 2% 2%'}} >
 						
-						<div style={{textAlign: 'justify'}} >
-							{this.state.topicContent}
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjfjflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							vinmejflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjfjflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							v
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjfjflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							vinmejflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjfjflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							v
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjfjflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							vinmejflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjfjflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							v
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjfjflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							vinmejflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjfjflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							v
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjfjflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							vinmejflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjfjflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							v
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjfjflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							vinmejflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjfjflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-							v
-							jflajfajfajfajfaljjjjjjjjjjjjjjjjjjjjjjjjjdjf
-						</div>
 					</div>
 				</main>
 			</div>
@@ -370,37 +142,44 @@ class TopicDep extends Component {
 export default TopicDep;
 
 
+// <div style={{textAlign: 'justify'}} >
+							// {this.state.topicContent}
+							// asdasa
+// </div>
 
-class TopicHeader extends Component {
 
-	onBookmarkClick = () => {
-		alert('user: ' + 'vinme' + ' topic_id: ' + this.props.topicId);
 
-		var data = new FormData();
-		data.append('user', window.localStorage.algoUser);
-		data.append('topic', this.state.topicId);
+
+// class TopicHeader extends Component {
+
+// 	onBookmarkClick = () => {
+// 		alert('user: ' + 'vinme' + ' topic_id: ' + this.props.topicId);
+
+// 		var data = new FormData();
+// 		data.append('user', window.localStorage.algoUser);
+// 		data.append('topic', this.state.topicId);
 		
-		// $.ajax({
-		// 	url: '/apigatway/to/users/api/bookmark',
-		// 	type: 'POST',
-		// 	data: data,
-		// 	contentType: 'json'
-		// });
+// 		// $.ajax({
+// 		// 	url: '/apigatway/to/users/api/bookmark',
+// 		// 	type: 'POST',
+// 		// 	data: data,
+// 		// 	contentType: 'json'
+// 		// });
 
-		this.setState({ bookmarkedId: this.state.topicId });
-	}
+// 		this.setState({ bookmarkedId: this.state.topicId });
+// 	}
 
-	onDownloadClick = () => {
-		alert('user: ' + 'vinme' + ' ჩამოტვირთავს თემას: ' + this.props.topicTitle);
-	}
+// 	onDownloadClick = () => {
+// 		alert('user: ' + 'vinme' + ' ჩამოტვირთავს თემას: ' + this.props.topicTitle);
+// 	}
 
-	render (){
-		return (
-			<div style={{backgroundColor: 'red', position: 'fixed', borderBottom: '2px solid black'}} >
-				<span style={{textWeight: 'bold', fondSize: '20px'}} >{this.props.topicTitle}</span>
-				<Button onClick={this.onBookmarkClick} style={{margin: '4px'}} >მონიშვნა</Button>
-				<Button onClick={this.onDownloadClick} style={{margin: '4px'}} >ჩამოტვირთვა</Button>
-			</div>
-		);
-	}
-}
+// 	render (){
+// 		return (
+// 			<div style={{backgroundColor: 'red', position: 'fixed', borderBottom: '2px solid black'}} >
+// 				<span style={{textWeight: 'bold', fondSize: '20px'}} >{this.props.topicTitle}</span>
+// 				<Button onClick={this.onBookmarkClick} style={{margin: '4px'}} >მონიშვნა</Button>
+// 				<Button onClick={this.onDownloadClick} style={{margin: '4px'}} >ჩამოტვირთვა</Button>
+// 			</div>
+// 		);
+// 	}
+// }

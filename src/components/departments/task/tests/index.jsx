@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {Table, Checkbox, Button} from 'react-bootstrap';
-
+import {Table, Checkbox} from 'react-bootstrap';
 
 
 class TaskTests extends Component {
@@ -36,7 +35,8 @@ class TaskTests extends Component {
 
 		if (!checked && this.state.selectedAllTest){
 			let newTestsCount = this.state.testsCount - 1;
-			const newValueChange = newTestsCount == 0 ? 0 : 2;
+			var zero = 0;
+			const newValueChange = newTestsCount === zero ? 0 : 2;
 			let newSelected = this.state.selectedTestsNames.slice().push(testName);
 			this.setState({ 
 							testsCount: newTestsCount,
@@ -66,14 +66,14 @@ class TaskTests extends Component {
 
 	render() {
 
-		const selectedBoxes = this.state.selectedTestsNames;
+		// const selectedBoxes = this.state.selectedTestsNames;
 		var isSelectedAll = this.state.selectedAllTest;
 		var testElements = [];
 
-		const value = this.state.value;
+		// const value = this.state.value;
 		if (this.props.tests !== undefined){
 			this.props.tests.forEach( function(testData){
-				var selected = selectedBoxes.includes(testData.name);
+				// var selected = selectedBoxes.includes(testData.name);
 				testElements.push(<TestElement key={testData.name} 
 												data={testData} 
 												isDisabled={isSelectedAll}

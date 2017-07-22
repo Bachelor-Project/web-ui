@@ -6,41 +6,40 @@ import TaskAnalyzer from './analyse';
 import ControlledTabs from './ControlledTabs';
 import Hinter from './hint';
 import {ToggleMenu} from '../../generals/helpers/Components';
-import $ from 'jquery';
 
 
 // -----------------------------------  Start Variables -----------------------------------
 
-const SideContent = [
-	{
-		icon: '',
-        label: 'Level 1',
-        content: [
-            {
-                icon: '',
-                label: 'task 1',
-            },
-			{
-				icon: '',
-                label: 'task 2'
-			}
-		]      
-	},
-	{
-		icon: '',
-        label: 'Level 2',
-        content: [
-            {
-                icon: '',
-                label: 'task 1',
-            },
-			{
-				icon: '',
-                label: 'task 2'
-			}
-		]           
-	}
-];
+// const SideContent = [
+// 	{
+// 		icon: '',
+//         label: 'Level 1',
+//         content: [
+//             {
+//                 icon: '',
+//                 label: 'task 1',
+//             },
+// 			{
+// 				icon: '',
+//                 label: 'task 2'
+// 			}
+// 		]      
+// 	},
+// 	{
+// 		icon: '',
+//         label: 'Level 2',
+//         content: [
+//             {
+//                 icon: '',
+//                 label: 'task 1',
+//             },
+// 			{
+// 				icon: '',
+//                 label: 'task 2'
+// 			}
+// 		]           
+// 	}
+// ];
 
 const tests = [
 	{

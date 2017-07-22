@@ -1,31 +1,26 @@
 import React, {Component} from 'react';
-import {Modal, Button} from 'react-bootstrap';
+import {Modal} from 'react-bootstrap';
 
-import {FieldGroup, Selector, FormSelector} from '../../generals/helpers/Components';
-import $ from 'jquery';
-import Multipart from 'multi-part';
-import http from 'http';
-import httpRequest from 'http_request';
+import {FormSelector} from '../../generals/helpers/Components';
 
-
-const languages = [
-	{
-		id: 0,
-		descrip: 'ყველა'
-	},
-	{
-		id: 1,
-		descrip: 'Java 1.8'
-	},
-	{
-		id: 2,
-		descrip: 'GNU c++'
-	},
-	{
-		id: 3,
-		descrip: 'Python 2.7' 
-	},
-];
+// const languages = [
+// 	{
+// 		id: 0,
+// 		descrip: 'ყველა'
+// 	},
+// 	{
+// 		id: 1,
+// 		descrip: 'Java 1.8'
+// 	},
+// 	{
+// 		id: 2,
+// 		descrip: 'GNU c++'
+// 	},
+// 	{
+// 		id: 3,
+// 		descrip: 'Python 2.7' 
+// 	},
+// ];
 
 
 
@@ -35,20 +30,28 @@ export default class TaskUploadModal extends Component {
 		super(props);
 
 		this.state = {
-			mainTopicSelected: false,
+			selectedMainTopic: '',
+			selectedMainTopicID: 0
 		}
 	}
 
 
 	onUploadClick = (e) => {
-		if (this.fileInput.files.length == 0 || !this.timeInput.value || !this.memoryInput.value || !this.state.mainTopicSelected){
-			alert("შეავსეთ ყველა ველი");
-			e.preventDefault();
-		}
+		// var fileInLength = 0;
+		// if (this.fileInput.files.length === fileInLength || 
+		// 	!this.timeInput.value || !this.memoryInput.value || 
+		// 	!(this.state.mainTopicSelected && this.state.selectedMainTopicID > 0)){
+		// 		alert("შეავსეთ ყველა ველი");
+		// 		e.preventDefault();
+		// }
 	}
 
-	onMainTopicSelected = (value) => {
-		this.setState({ mainTopicSelected: value.length !== 0 });
+	onSelectedNew = (name) => {
+		this.setState({ selectedMainTopic: name });
+	}
+
+	onSelectedExisted = (id) => {
+		this.setState({ selectedMainTopicID: id });
 	}
 
 
@@ -67,7 +70,7 @@ export default class TaskUploadModal extends Component {
 				        ამოცანის მონაცემების არქივი: <input style={{display: 'inline'}} type="file" name="file" ref={input => this.fileInput = input} /> <br /><br />
 					   	<input type="number" name="time_lm" placeholder="დროის ლიმიტი (წმ.)" ref={input => this.timeInput = input} />
 					   	<input type="number" name="memory_lm" placeholder="მეხსიერების ლიმიტი (მბ.)" ref={input => this.memoryInput = input} /><br/><br/>
-					   	<FormSelector options={this.props.mainTopics} onSelected={this.onMainTopicSelected} /><br />
+					   	<FormSelector options={this.props.mainTopics} onSelectedNew={this.onSelectedNew} onSelectedExisted={this.onSelectedExisted}/><br />
 					   	დონე: <select name="level">{levels}</select><br /><br />
 					   	
 					   	<input type="submit" value="ატვირთვა" onClick={this.onUploadClick}/>

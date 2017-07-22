@@ -41,8 +41,7 @@ export default class SignInModal extends Component {
                 this.onHideAction();
             }.bind(this))
         .catch(function(error){
-                console.log(error);
-                if (error.status == 400){
+                if (error.status === 400){
                     this.setState({ isInputIncorrect: true });
                 }
             }.bind(this));

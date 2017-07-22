@@ -9,23 +9,6 @@ import $ from 'jquery';
 
 const headers = ['N', 'თემის დასახელება', 'რაოდენობა'];
 
-// const topics = [
-// 	{
-// 		id: 1,
-// 		name: 'გრაფი',
-// 		number: '30'
-// 	},
-// 	{
-// 		id: 2,
-// 		name: 'გეომეტრია',
-// 		number: '35'
-// 	},
-// 	{
-// 		id: 3,
-// 		name: 'ალგებრა',
-// 		number: '50'
-// 	}
-// ];
 
 class Topics extends Component {
 
@@ -56,13 +39,17 @@ class Topics extends Component {
         });
 	}
 
+	getTopicName(id) {
+		return this.state.topics.find(elem => elem.id === id);
+	}
+
 	render (){
 		const topicsPath = this.props.path;
 		return (
 			<Switch>
 				<Route exact path={topicsPath} render={() => (<GeneralTable path={topicsPath} pageTitle="თეორია" headData={headers} 
 																			bodyData={this.state.topics} />)} />
-				<Route path={topicsPath + '/:topicId'} component={TopicDep} />
+				<Route path={topicsPath + '/:mainTopicId'} component={TopicDep} />
 			</Switch>
 			
 		);

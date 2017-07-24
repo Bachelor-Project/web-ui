@@ -24,14 +24,14 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        // const uploaderRoleInStorage = window.localStorage.getItem("uploader");
+        const uploaderRoleInStorage = window.localStorage.getItem("uploader");
 
         this.state = {
             signInOpened: false,
             signUpOpened: false,
 
-            isUploader: true, //uploaderRoleInStorage !== null && uploaderRoleInStorage,
-            isUserSignIn: true, //window.localStorage.getItem("user") !== null,
+            isUploader: uploaderRoleInStorage !== null && uploaderRoleInStorage,
+            isUserSignIn: window.localStorage.getItem("user") !== null,
             username: window.localStorage.getItem("user"),
 
             topicUploadOpen: false,

@@ -49,7 +49,7 @@ export default class SignUpModal extends Component {
 		data.password = passwordValue;
 
 		$.ajax({
-			url: '/bp_apigatway/api/signup?url=http://localhost:8080/bp_signin/app/signup',
+			url: '/signup',
 			method: 'post',
 			contentType: "application/json; charset=utf-8",
 			data: JSON.stringify(data),
@@ -60,14 +60,13 @@ export default class SignUpModal extends Component {
 				}.bind(this) )
 		.catch(function(error){
 					const responseAsJSON = error.responseJSON;
-					if (responseAsJSON.status == 400){
-						for (var i = 0; i < responseAsJSON.length; i++){
-			                const jsonError = responseAsJSON[i];
-			                if (jsonError.key === 'username') {
-			                    this.setState({ usernameFeedback: true, usernameValidState: 'error' });
-			                }
-			            }
-					}
+					alert(JSON.stringify(responseAsJSON));
+					for (var i = 0; i < responseAsJSON.length; i++){
+		                const jsonError = responseAsJSON[i];
+		                if (jsonError.key === 'username') {
+		                    this.setState({ usernameFeedback: true, usernameValidState: 'error' });
+		                }
+		            }
 				}.bind(this) );
 	}
 

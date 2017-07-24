@@ -46,6 +46,12 @@
     "/name_main_topic": {
       "target": "http://localhost:8080/files_data/api"
     },
+    "/signup": {
+      "target": "http://localhost:8080/bp_signin/app/"
+    },
+    "/signin": {
+      "target": "http://localhost:8080/bp_signin/app/"
+    },
     "/bp_apigatway": {
       "target": "http://localhost:8080/"
     }

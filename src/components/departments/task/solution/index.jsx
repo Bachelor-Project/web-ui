@@ -10,6 +10,9 @@ import 'brace/theme/github'; import 'brace/theme/kuroir'; import 'brace/theme/mo
 import 'brace/theme/solarized_light' ; import 'brace/theme/terminal'; import 'brace/theme/textmate';
 import 'brace/theme/tomorrow'; import 'brace/theme/twilight'; import 'brace/theme/xcode';
 
+import $ from 'jquery';
+
+
 
 const labels = {
 	resultPanelHeader: "შედეგი",
@@ -36,9 +39,29 @@ class TaskSolution extends Component {
 	}
 
 	onCompileClick = () => {
-		alert("COMPILE");
+		var data = {};
+  		data['user'] = window.localStorage.user;
+  		data['taskName'] = this.props.taskName;
+  		data['lang'] = this.langSelect.value;
+  		data['code'] = this.aceEditor.value;
 
-		this.setState({ compileSuccess: true });
+  		// alert(JSON.stringify(data));
+  		console.log(window.localStorage.user);
+  		console.log(this.props.taskName);
+  		console.log(this.langSelect.value);
+  		console.log(this.aceEditor.value);
+
+		// $.ajax({
+		// 	url: '/compile',
+  //           method: 'post',
+  //           contentType: "application/json; charset=utf-8",
+  //           data: data,
+  //           success: (data) => {
+  //           	alert(data);
+  //           }
+		// });
+
+		// this.setState({ compileSuccess: true });
 	}
 
 	onRunClick = () => {
@@ -53,7 +76,7 @@ class TaskSolution extends Component {
 	} 
 
 	onEditorValueChange = (newValue, event) => {
-		
+		this.setState({ editorValue: newValue });
 	}
 
 	onLanguageChange = (event) => {

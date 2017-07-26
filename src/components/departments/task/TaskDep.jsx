@@ -151,7 +151,7 @@ const solutionTabs = [
 		id: 1,
 		htmlID: "solutionTab",
 		title: "ამოხსნა",
-		content: <TaskSolution taskLanguages={languages} result={res} />
+		content: <TaskSolution taskLanguages={languages} result={res} taskName="Balance" />
 	},
 	{
 		id: 2,
@@ -290,7 +290,7 @@ class TaskDep extends Component {
 
 
 	render (){
-		alert("mainTopicId " + this.props.match.params.mainTopicId);
+		// alert("mainTopicId " + this.props.match.params.mainTopicId);
 		window.localStorage.setItem("taskID", 2);
 		
 		const isSigned = window.localStorage.getItem("token") !== null;

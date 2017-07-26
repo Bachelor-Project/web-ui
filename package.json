@@ -52,6 +52,9 @@
     "/signin": {
       "target": "http://localhost:8080/bp_signin/app/"
     },
+    "/compile" :{
+      "target": "http://localhost:8080/execution/api/"  
+    },
     "/bp_apigatway": {
       "target": "http://localhost:8080/"
     }

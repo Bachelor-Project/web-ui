@@ -85,20 +85,19 @@ class TaskAnalyzer extends Component {
 
 	render (){
 		const isSigned = window.localStorage.getItem("token") !== null;
-		const listComments = this.state.comments.map((comment) => {
-			return (
-					<Media key={comment.id} >
-						<Media.Body>
-							<Media.Heading>{comment.username}</Media.Heading>
-							<Paragraphs text={comment.text} /> 
-						</Media.Body>
-					</Media>
-					);
-		});
+		// const listComments = this.state.comments.map((comment) => {
+		// 	return (
+		// 			<Media key={comment.id} >
+		// 				<Media.Body>
+		// 					<Media.Heading>{comment.username}</Media.Heading>
+		// 					<Paragraphs text={comment.text} /> 
+		// 				</Media.Body>
+		// 			</Media>
+		// 			);
+		// });
 
 		return (
 			<div style={{marginBottom: '2%'}} >
-				{listComments}
 				{isSigned && <div style={{border: '2px dotted black', padding: '8px', marginTop: '16px', borderTop: 'none'}} >
 					<textarea rows="10" style={{width: '100%'}} id="analyse-input" placeholder="შეიყვანეთ ტექსტი" />
 					<Button onClick={this.onPublishClick} 

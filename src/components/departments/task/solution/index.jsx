@@ -35,7 +35,11 @@ class TaskSolution extends Component {
 			editorMode: '',
 			editorTheme: '',
 			compileSuccess: false,
-			defaultLan: 'Java'
+			defaultLan: 'Java',
+
+			execResult: '',
+			execState: '',
+			execStyle: 'default'
 		}
 	}
 
@@ -52,37 +56,56 @@ class TaskSolution extends Component {
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(data),
             success: (data) => {
-            	alert(data);
+            	this.setState({ compileSuccess: true, execResult : "წარმატებით დაკომპილირდა", execState: 'success', execStyle: 'success' });
+            },
+            error: (data) => {
+            	this.setState({ execResult : data.responseText, execState: 'error', execStyle: 'danger' });
             }
 		});
 
 		// this.setState({ compileSuccess: true });
 	}
 
+	processComeErrors = (errorJsonArr) => {
+		var chain = '';
+		errorJsonArr.forEach((error) => {
+			chain = chain + JSON.stringify(error) + '\n';
+		});
+	}
+
 	onRunClick = () => {
-		alert("RUN");
+		this.setState({compileSuccess: false});
 	}
 
 	onEditorLoad = (editor) => {
 		if (this.props.taskLanguages.length > 0) {
-			this.setState({ editorValue: this.props.taskLanguages[0].code, 
+			var code = this.props.taskLanguages[0].code;
+			if (this.props.taskLanguages[0].name.toLowerCase() === 'java'){
+				code = this.props.taskLanguages[0].code.replace('Solution', this.props.taskName);
+			}
+			this.setState({ editorValue: code, 
 							editorMode: this.props.taskLanguages[0].name.toLowerCase() });	
 		}
 	} 
 
 	onEditorValueChange = (newValue, event) => {
-		this.setState({ editorValue: newValue });
+		this.setState({ compileSuccess: false, editorValue: newValue });
 	}
 
 	onLanguageChange = (event) => {
 		const selectedOptionName = event.target.value
 		this.setState({ defaultLan: selectedOptionName });
+
 		const languages = this.props.taskLanguages.filter( (lang) => {
 			return lang.name == selectedOptionName;
 		});
 		if (languages.length > 0){
 			const language = languages[0];
 			const mode = language.name.toLowerCase();
+			if (mode === 'java') {
+				var newCode = language.code.replace('Solution', this.props.taskName);
+				language.code = newCode;
+			}
 			this.setState({ editorValue: language.code, editorMode: mode });
 		}
 		
@@ -139,9 +162,9 @@ class TaskSolution extends Component {
 					  tabSize: 4,
 					  }}
 				/>
-				<Panel header={labels.resultPanelHeader} bsStyle={this.props.result.panelStyle} >
-					<FormGroup controlId="solutionResultGroup" validationState={this.props.result.textareaStyle} >
-				    	<FormControl componentClass="textarea" />
+				<Panel header={labels.resultPanelHeader} bsStyle={this.state.execStyle} >
+					<FormGroup controlId="solutionResultGroup" validationState={this.state.execState} >
+				    	<FormControl componentClass="textarea" value={this.state.execResult} />
 				    </FormGroup>
 				</Panel>
 			</div>

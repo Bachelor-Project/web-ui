@@ -29,7 +29,7 @@ const languages = [
 		id: 3,
 		name: "c_cpp",
 		descrip: "GNU C++",
-		code: "\nint main() {\n\n" +
+		code: "\nint main(int argc, const char * argv[]) {\n\n" +
 					"\treturn 0;\n" + 
 				"}\n"
 	}
@@ -58,7 +58,7 @@ function TaskContent(props) {
 
 
 const treeData = {
-	name: 'გრაფი',
+	name: '',
 	toggled: true,
 	children: 	[
 					{
@@ -104,7 +104,9 @@ class TaskDep extends Component {
 
 			taskTabs: [],
 			solutionTabs: [],
-			solutionResult: ''
+			solutionResult: '',
+
+			task_name: ''
 		}
 	}
 
@@ -140,6 +142,24 @@ class TaskDep extends Component {
 			dataType: 'json',
             cache: false
 		});
+
+		var mainTopicID = this.props.match.params.mainTopicId;
+		this.fetchMainTopicName(mainTopicID);
+	}
+
+	fetchMainTopicName = (mainTopicID) => {
+		$.ajax({
+            url: '/name_main_topic',
+            type: 'GET',
+            data: {
+                id: mainTopicID,
+            },
+            success: (data) => {
+                        treeData.name = data;
+                    },
+            dataType: 'text',
+            cache: false
+        });
 	}
 
 	fetchTaskById = (taskID) => {
@@ -175,7 +195,8 @@ class TaskDep extends Component {
 										id: 1,
 										htmlID: "solutionTab",
 										title: "ამოხსნა",
-										content: <TaskSolution taskLanguages={languages} result={this.state.solutionResult} taskName="Balance" />
+										content: <TaskSolution taskLanguages={languages} 
+												result={this.state.solutionResult} taskName={data.task.name} />
 									},
 									{
 										id: 2,
@@ -184,7 +205,7 @@ class TaskDep extends Component {
 										content: <TaskAnalyzer taskID={taskID} />
 									}
 								];
-				this.setState({ taskTabs : upTabs, solutionTabs: bottomTabs, hinters: data.hints });
+				this.setState({ taskTabs : upTabs, solutionTabs: bottomTabs, hinters: data.hints, task_name: data.task.name });
 			},
 			dataType: 'json',
             cache: false
@@ -198,7 +219,6 @@ class TaskDep extends Component {
 
 	// Change task from left menu:
 	handleTaskChange = (node) => {
-		// alert("გადმოსაწერია ამოცანა id-ით " + node.id + " პირობით, ტესტებით, მითითებებით და ყველაფრით ");
 		this.fetchTaskById(node.id);
 		this.setState({ taskId: node.id});
 	}

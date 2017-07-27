@@ -30,7 +30,7 @@ class ControlledTabs extends Component {
 		const childrenTabs = this.props.tabs.map((tab) => {
 			return (<Tab eventKey={tab.id} key={tab.id} title={tab.title} >
 						{hasAspectRatioHeight 	? <AspectRatioDivs content={tab.content} />
-												: tab.content
+												: <div >{tab.content}</div>
 						}
 					</Tab>);
 		});

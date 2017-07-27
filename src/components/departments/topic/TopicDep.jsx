@@ -21,13 +21,9 @@ class TopicDep extends Component {
         this.state = {
         	topicTitle: '',
         	topicId: 0,
-        	topicContent: 'content of topic',
-
-        	bookmarkedId: 0,
-
         	cursor: null
         };
-        // this.onToggle = this.onToggle.bind(this);
+        this.onToggle = this.onToggle.bind(this);
 	}
 
 	componentDidMount() {
@@ -49,7 +45,6 @@ class TopicDep extends Component {
                 id: mainTopicID,
             },
             success: (data) => {
-            			console.log(data);
                         mainTopicTreeData.name = data;
                     },
             dataType: 'text',
@@ -66,7 +61,8 @@ class TopicDep extends Component {
             },
             success: (data) => {
                         var prioritiesData = data.map((elem) => {
-                                                return {'id': elem.id, 'name': elem.descrip};
+                                                return {'id': elem.id, 'name': <a href={"/pdf?name="+elem.descrip+".pdf"}  target="pdf_frame" >
+                                                									{elem.descrip}</a>};
                                             });
                         mainTopicTreeData.children = prioritiesData;
                     },
@@ -77,43 +73,19 @@ class TopicDep extends Component {
 
 	onToggle = (node, toggled) => {
         if(this.state.cursor){
-        	// this.state.cursor.active = false;
-        	this.setState({ cursor: {active: false} });
+        	var prevNode = this.state.cursor;
+        	prevNode.active = false;
         }
         node.active = true;
         if(node.children){ node.toggled = toggled; }
-        this.setState({ cursor: node,  topicTitle: node.name, topicId: node.id, topicContent: 'topic content ' + node.name});
+        this.setState({ cursor: node, topicTitle: node.name, topicId: node.id});
 
     }
 
     // Change task from left menu:
 	handleTopicChange = (node) => {
-
-		alert("გადმოსაწერია თემა id-ით " + node.id);
 		this.setState({ taskId: node.id, taskContent: 'task content of ' + node.name });
 	}
-
-	onBookmarkClick = () => {
-		alert('user: vinme topic_id: ' + this.state.topicId);
-
-		var data = new FormData();
-		data.append('user', window.localStorage.algoUser);
-		data.append('topic', this.state.topicId);
-		// $.ajax({
-		// 	url: '/apigatway/to/users/api/bookmark',
-		// 	type: 'POST',
-		// 	data: data,
-		// 	contentType: 'json'
-		// });
-
-		this.setState({ bookmarkedId: this.state.topicId });
-	}
-
-	onDownloadClick = () => {
-		var user = 'vinme;'
-		alert('user: ' + user + ' ჩამოტვირთავს თემას: ' + this.state.topicTitle);
-	}
-
 
 	render (){
 		const isSigned = window.localStorage.getItem("token") !== null;
@@ -123,15 +95,10 @@ class TopicDep extends Component {
 				<ToggleMenu treeData={mainTopicTreeData} nodeChangeHandler={this.handleTopicChange} />
 
 				<main id="page-wrap" > 
-					<div style={{borderBottom: '2px solid black', 
-										marginTop: '4.5%', padding: '8px'}} >
-						<span style={{textWeight: 'bold', fondSize: '50px', marginLeft: '30%'}} >{this.state.topicTitle}</span>
-						{isSigned && <Button onClick={this.onBookmarkClick} style={{marginLeft: '10%'}} >მონიშვნა</Button>}
-						{isSigned && <Button onClick={this.onDownloadClick} style={{marginLeft: '10%'}} >ჩამოტვირთვა</Button>}
-					</div>
-					
-					<div style={{margin: '2px 4% 2% 2%'}} >
-						
+					<div style={{borderTop: '2px solid black', marginTop: '4.5%'}} >
+						<frameset cols="50%" >
+							<frame src="" name="pdf_frame" />
+						</frameset>
 					</div>
 				</main>
 			</div>
@@ -140,46 +107,3 @@ class TopicDep extends Component {
 }
 
 export default TopicDep;
-
-
-// <div style={{textAlign: 'justify'}} >
-							// {this.state.topicContent}
-							// asdasa
-// </div>
-
-
-
-
-// class TopicHeader extends Component {
-
-// 	onBookmarkClick = () => {
-// 		alert('user: ' + 'vinme' + ' topic_id: ' + this.props.topicId);
-
-// 		var data = new FormData();
-// 		data.append('user', window.localStorage.algoUser);
-// 		data.append('topic', this.state.topicId);
-		
-// 		// $.ajax({
-// 		// 	url: '/apigatway/to/users/api/bookmark',
-// 		// 	type: 'POST',
-// 		// 	data: data,
-// 		// 	contentType: 'json'
-// 		// });
-
-// 		this.setState({ bookmarkedId: this.state.topicId });
-// 	}
-
-// 	onDownloadClick = () => {
-// 		alert('user: ' + 'vinme' + ' ჩამოტვირთავს თემას: ' + this.props.topicTitle);
-// 	}
-
-// 	render (){
-// 		return (
-// 			<div style={{backgroundColor: 'red', position: 'fixed', borderBottom: '2px solid black'}} >
-// 				<span style={{textWeight: 'bold', fondSize: '20px'}} >{this.props.topicTitle}</span>
-// 				<Button onClick={this.onBookmarkClick} style={{margin: '4px'}} >მონიშვნა</Button>
-// 				<Button onClick={this.onDownloadClick} style={{margin: '4px'}} >ჩამოტვირთვა</Button>
-// 			</div>
-// 		);
-// 	}
-// }

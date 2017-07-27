@@ -147,7 +147,6 @@ export class ToggleMenu extends Component {
 
     onToggle = (node, toggled) => {
         if(this.state.cursor){
-            // this.state.cursor.active = false;
             this.setState({cursor: {active: false}});
         }
         node.active = true;

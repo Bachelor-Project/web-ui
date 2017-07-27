@@ -16,9 +16,18 @@ class Hinter extends Component {
 		var tabs = [];
 		if (this.props.hinters !== undefined) {
 			this.props.hinters.forEach( function(hinter, i) {
-				if (hinter.code) {
+				if (hinter.isCode) {
 					hinter.htmlID = "codeTab" + hinter.title;
-					tabs.push(hinter);
+					var slices = hinter.content.split('\n\n');
+					var entries = slices.map((line, i) => {
+						return (<p key={i} style={{fontSize: '16px'}}>{line}</p>);
+					});
+					var newHinter = {};
+					newHinter['id'] = hinter.id;
+					newHinter['isCode'] = hinter.isCode;
+					newHinter['title'] = hinter.title;
+					newHinter['content'] = entries;
+					tabs.push(newHinter);
 				}
 				else {
 					hinterElements.push(<HinterElement key={i} title={hinter.title} content={hinter.content} />);

@@ -34,7 +34,8 @@ class TaskSolution extends Component {
 			editorValue: '',
 			editorMode: '',
 			editorTheme: '',
-			compileSuccess: false
+			compileSuccess: false,
+			defaultLan: 'Java'
 		}
 	}
 
@@ -42,24 +43,18 @@ class TaskSolution extends Component {
 		var data = {};
   		data['user'] = window.localStorage.user;
   		data['taskName'] = this.props.taskName;
-  		data['lang'] = this.langSelect.value;
-  		data['code'] = this.aceEditor.value;
+  		data['lang'] = this.state.defaultLan;
+  		data['code'] = this.state.editorValue;
 
-  		// alert(JSON.stringify(data));
-  		console.log(window.localStorage.user);
-  		console.log(this.props.taskName);
-  		console.log(this.langSelect.value);
-  		console.log(this.aceEditor.value);
-
-		// $.ajax({
-		// 	url: '/compile',
-  //           method: 'post',
-  //           contentType: "application/json; charset=utf-8",
-  //           data: data,
-  //           success: (data) => {
-  //           	alert(data);
-  //           }
-		// });
+		$.ajax({
+			url: '/compile',
+            method: 'put',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            success: (data) => {
+            	alert(data);
+            }
+		});
 
 		// this.setState({ compileSuccess: true });
 	}
@@ -80,9 +75,10 @@ class TaskSolution extends Component {
 	}
 
 	onLanguageChange = (event) => {
-		const selectedOptionID = event.target.value
+		const selectedOptionName = event.target.value
+		this.setState({ defaultLan: selectedOptionName });
 		const languages = this.props.taskLanguages.filter( (lang) => {
-			return lang.id == selectedOptionID;
+			return lang.name == selectedOptionName;
 		});
 		if (languages.length > 0){
 			const language = languages[0];
@@ -100,7 +96,7 @@ class TaskSolution extends Component {
 		const isSigned = window.localStorage.getItem("token") !== null;
 
 		const languages = this.props.taskLanguages.map((lang) => {
-							return (<option key={lang.id} value={lang.id} id={'lang-' + lang.id} >{lang.descrip}</option>);
+							return (<option key={lang.id} value={lang.name} id={'lang-' + lang.id} >{lang.descrip}</option>);
 						});
 		const themes = allThemes.map((theme, i) => {
 						return (<option key={i} value={theme} id={'theme-' + i}>{theme}</option>);
@@ -115,7 +111,7 @@ class TaskSolution extends Component {
 								{labels.runButton}</Button>
 
 					<FormGroup style={{width: "16%", position: 'absolute', top: '8px', right: 'calc(16% + 20px)'}} controlId="solutionLangsSelected" >
-						<FormControl componentClass="select" placeholder={labels.language} onChange={this.onLanguageChange} >
+						<FormControl id="langSelector" componentClass="select" value={this.state.defaultLan} placeholder={labels.language} onChange={this.onLanguageChange} >
 							{languages}
 						</FormControl>
 					</FormGroup>

@@ -55,6 +55,23 @@
     "/compile" :{
       "target": "http://localhost:8080/execution/api/"  
     },
+    "/tasks_min_data": {
+      "target": "http://localhost:8080/files_data/api"
+    },
+    "/tasks_counting_main_topics": {
+      "target": "http://localhost:8080/files_data/api"
+    },"/task_full_data": {
+      "target": "http://localhost:8080/files_data/api"
+    },
+    "/comments": {
+      "target": "http://localhost:8080/bp_analyzer/api"
+    },
+    "/new_comment": {
+      "target": "http://localhost:8080/bp_analyzer/api"
+    },
+    "/pdf": {
+      "target": "http://localhost:8080/files_data/api"
+    },
     "/bp_apigatway": {
       "target": "http://localhost:8080/"
     }

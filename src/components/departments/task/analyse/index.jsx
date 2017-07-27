@@ -16,64 +16,54 @@ function Paragraphs(props) {
 }
 
 
-
-const fakeComments = [
-	{
-		id: 1,
-		user: 'user_1',
-		text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy" +
-				"text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book." + 
-				"It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-	},
-	{
-		id: 2,
-		user: 'user_2',
-		text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. \n" + 
-				"It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-	},
-	{
-		id: 3,
-		user: 'user_3',
-		text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy \n" +
-				"text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. \n" + 
-				"It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-	}
-];
-
-
 class TaskAnalyzer extends Component {
 
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			comments: fakeComments
+			comments: []
 		}
 	}
 
-	componentDidMount() {
-		const tID = window.localStorage.getItem("taskID");
-		$.get("/bp_analyzer/api/comments/" + tID, this.getCallBack);
+	componentWillReceiveProps(nextProps) {
+		if (this.props.taskID !== nextProps.taskID){
+			this.fetchComments(nextProps.taskID);
+		}
 	}
 
-	getCallBack = (data, status) => {
-		this.setState({ comments: data });
+	componentWillMount() {
+		this.fetchComments(this.props.taskID);
+	}
+
+	fetchComments = (taskId) => {
+		$.ajax({
+			url: '/comments/' + taskId,
+			method: 'GET',
+			success: (data) => {
+				this.setState({ comments: data });
+			},
+			dataTYpe: 'jaon',
+			cache: false
+		});
 	}
 
 	onPublishClick = () => {
-		var currComments = this.state.comments.slice();
 		let text = $("#analyse-input").val();
 		if (text.length > 0){
 			var user = window.localStorage.getItem("user");
+			
+			var currComments = this.state.comments.slice();
 			currComments.push({ id: currComments.length + 1, username: user, text: text });
 			this.setState({ comments: currComments });
+
 			var requestJson = {};
 			requestJson.username = user;
 			requestJson.text = text;
-			requestJson.taskId = window.localStorage.getItem("taskID");
+			requestJson.taskId = this.props.taskID; // window.localStorage.getItem("taskID");
 
 			$.ajax({
-	            url: '/bp_analyzer/api/comment',
+	            url: '/new_comment',
 	            method: 'post',
 	            contentType: "application/json; charset=utf-8",
 	            data: JSON.stringify(requestJson)
@@ -85,19 +75,20 @@ class TaskAnalyzer extends Component {
 
 	render (){
 		const isSigned = window.localStorage.getItem("token") !== null;
-		// const listComments = this.state.comments.map((comment) => {
-		// 	return (
-		// 			<Media key={comment.id} >
-		// 				<Media.Body>
-		// 					<Media.Heading>{comment.username}</Media.Heading>
-		// 					<Paragraphs text={comment.text} /> 
-		// 				</Media.Body>
-		// 			</Media>
-		// 			);
-		// });
 
 		return (
 			<div style={{marginBottom: '2%'}} >
+				{this.state.comments.length > 0 && this.state.comments.map((elem) => {
+															return (
+																	<Media key={elem.id} >
+																		<Media.Body>
+																			<Media.Heading>{elem.username}</Media.Heading>
+																			<Paragraphs text={elem.text} /> 
+																		</Media.Body>
+																	</Media>
+																	);
+														})
+					}
 				{isSigned && <div style={{border: '2px dotted black', padding: '8px', marginTop: '16px', borderTop: 'none'}} >
 					<textarea rows="10" style={{width: '100%'}} id="analyse-input" placeholder="შეიყვანეთ ტექსტი" />
 					<Button onClick={this.onPublishClick} 

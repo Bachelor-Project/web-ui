@@ -38,7 +38,7 @@ class TaskAnalyzer extends Component {
 
 	fetchComments = (taskId) => {
 		$.ajax({
-			url: '/comments/' + taskId,
+			url: '/bp_analyzer/api/comments/' + taskId,
 			method: 'GET',
 			success: (data) => {
 				this.setState({ comments: data });
@@ -63,7 +63,7 @@ class TaskAnalyzer extends Component {
 			requestJson.taskId = this.props.taskID; // window.localStorage.getItem("taskID");
 
 			$.ajax({
-	            url: '/new_comment',
+	            url: '/bp_analyzer/api/new_comment',
 	            method: 'post',
 	            contentType: "application/json; charset=utf-8",
 	            data: JSON.stringify(requestJson)

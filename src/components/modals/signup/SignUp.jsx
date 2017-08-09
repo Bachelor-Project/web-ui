@@ -49,7 +49,7 @@ export default class SignUpModal extends Component {
 		data.password = passwordValue;
 
 		$.ajax({
-			url: '/signup',
+			url: '/bp_signin/app/signup',
 			method: 'post',
 			contentType: "application/json; charset=utf-8",
 			data: JSON.stringify(data),

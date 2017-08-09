@@ -60,7 +60,8 @@
     },
     "/tasks_counting_main_topics": {
       "target": "http://localhost:8080/files_data/api"
-    },"/task_full_data": {
+    },
+    "/task_full_data": {
       "target": "http://localhost:8080/files_data/api"
     },
     "/comments": {
@@ -70,6 +71,9 @@
       "target": "http://localhost:8080/bp_analyzer/api"
     },
     "/pdf": {
+      "target": "http://localhost:8080/files_data/api"
+    },
+    "/run_code": {
       "target": "http://localhost:8080/files_data/api"
     },
     "/bp_apigatway": {

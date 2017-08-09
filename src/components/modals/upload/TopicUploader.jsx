@@ -49,7 +49,7 @@ export default class TopicUploadModal extends Component {
 
 	fetchPrioritiesFor = (mainTopicID) => {
         $.ajax({
-            url: '/priorities',
+            url: '/files_data/api/priorities',
             type: 'GET',
             data: {
                 main_topic: mainTopicID,
@@ -73,7 +73,7 @@ export default class TopicUploadModal extends Component {
 					<Modal.Title >{this.props.title}</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<form action="/uploadTopic" method="post" encType="multipart/form-data" encode="utf8" >
+					<form action="/files_data/api/uploadTopic" method="post" encType="multipart/form-data" encode="utf8" >
 				        თემა: <input style={{display: 'inline'}} type="file" name="file" ref={input => this.fileInput = input} /> <br /><br />
 					   	<FormSelector options={this.props.mainTopics} onSelectedNew={this.onSelectedNew} onSelectedExisted={this.onSelectedExisted} /><br />
 					   	<input type="number" name="priority" placeholder="პრიორიტეტი" ref={input => this.priorityInput = input} />

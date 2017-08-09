@@ -29,7 +29,7 @@ export default class SignInModal extends Component {
         requestJson.password = $('#signInPassword').val();
 
         $.ajax({
-            url: '/signin',
+            url: '/bp_signin/app/signin',
             method: 'post',
             // headers: {'Authentication': window.localStorage.getItem("token")}, // to "log out"-ti gaketebulia token agar iqneba
             contentType: "application/json; charset=utf-8",

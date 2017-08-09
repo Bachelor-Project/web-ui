@@ -42,7 +42,7 @@ class Tasks extends Component {
 
 	fetchMainTopicsWithCount = () => {
 		$.ajax({
-            url: '/tasks_counting_main_topics',
+            url: '/files_data/api/tasks_counting_main_topics',
             type: 'GET',
             success: (data) => {
             			var mainTopicsData = data.map((elem) => {

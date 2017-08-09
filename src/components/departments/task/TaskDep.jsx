@@ -129,7 +129,7 @@ class TaskDep extends Component {
 
 	componentWillMount(){
 		$.ajax({
-			url: '/tasks_min_data/' + this.props.match.params.mainTopicId,
+			url: '/files_data/api/tasks_min_data/' + this.props.match.params.mainTopicId,
 			method: 'GET',
 			success: (data) => {
 				data.forEach((task_min) => {
@@ -149,7 +149,7 @@ class TaskDep extends Component {
 
 	fetchMainTopicName = (mainTopicID) => {
 		$.ajax({
-            url: '/name_main_topic',
+            url: '/files_data/api/name_main_topic',
             type: 'GET',
             data: {
                 id: mainTopicID,
@@ -164,7 +164,7 @@ class TaskDep extends Component {
 
 	fetchTaskById = (taskID) => {
 		$.ajax({
-			url: '/task_full_data/' + taskID,
+			url: '/files_data/api/task_full_data/' + taskID,
 			method: 'GET',
 			success: (data) => {
 				const tmLimit = "დროის ლიმიტი: " + data.task.timeLimit + " წმ.; ";
@@ -196,7 +196,8 @@ class TaskDep extends Component {
 										htmlID: "solutionTab",
 										title: "ამოხსნა",
 										content: <TaskSolution taskLanguages={languages} 
-												result={this.state.solutionResult} taskName={data.task.name} />
+												result={this.state.solutionResult} 
+												taskName={data.task.name} taskId={taskID} />
 									},
 									{
 										id: 2,

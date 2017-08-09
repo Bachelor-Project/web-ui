@@ -51,7 +51,7 @@ class TaskSolution extends Component {
   		data['code'] = this.state.editorValue;
 
 		$.ajax({
-			url: '/compile',
+			url: '/execution/api/compile',
             method: 'put',
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(data),
@@ -73,9 +73,33 @@ class TaskSolution extends Component {
 		});
 	}
 
-	onRunClick = () => {
-		this.setState({compileSuccess: false});
+	onRunClick = (e) => {
+		// this.setState({compileSuccess: false});
+
+		var dataJson = {};
+		dataJson["lang"] = this.state.defaultLan;
+		dataJson["username"] = window.localStorage.getItem("user");
+		dataJson["taskId"] = this.props.taskId;
+		dataJson["compiled"] = true;
+
+		$.ajax({
+			url: '/files_data/api/run_code',
+			method: 'POST',
+			contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(dataJson),
+
+            success: (data) => {
+            	this.setState({ execResult : JSON.stringify(data)});
+            },
+            error: (data) => {
+            	alert("შეცდომა");
+
+            	alert(JSON.stringify(data));
+            }
+		});
+		e.preventDefault();
 	}
+
 
 	onEditorLoad = (editor) => {
 		if (this.props.taskLanguages.length > 0) {
@@ -162,8 +186,8 @@ class TaskSolution extends Component {
 					  tabSize: 4,
 					  }}
 				/>
-				<Panel header={labels.resultPanelHeader} bsStyle={this.state.execStyle} >
-					<FormGroup controlId="solutionResultGroup" validationState={this.state.execState} >
+				<Panel header={labels.resultPanelHeader}  bsStyle={this.state.execStyle} >
+					<FormGroup controlId="solutionResultGroup" >
 				    	<FormControl componentClass="textarea" value={this.state.execResult} />
 				    </FormGroup>
 				</Panel>

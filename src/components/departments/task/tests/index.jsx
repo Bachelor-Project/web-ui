@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Table, Checkbox} from 'react-bootstrap';
+import $ from 'jquery';
 
 
 class TaskTests extends Component {
@@ -65,19 +66,32 @@ class TaskTests extends Component {
 
 
 	render() {
-
-		// const selectedBoxes = this.state.selectedTestsNames;
+		const testsResultJSON = this.props.testsResult;
 		var isSelectedAll = this.state.selectedAllTest;
 		var testElements = [];
+		
+		const greenColor = {color: 'green'};
+		const redColor = {color: 'red'};
+		const defaultColor = {color: 'black'};
 
-		// const value = this.state.value;
+
 		if (this.props.tests !== undefined){
 			this.props.tests.forEach( function(testData){
-				// var selected = selectedBoxes.includes(testData.name);
+				var bgc = null;
+				var resultText = '';
+
+				if (testsResultJSON.length != 0){
+					const appropTest = testsResultJSON.find((elem) => {return elem.name === testData.name});
+					bgc = appropTest.passed;
+					resultText = appropTest.error;
+				}
+				
 				testElements.push(<TestElement key={testData.name} 
 												data={testData} 
+												result={resultText}
 												isDisabled={isSelectedAll}
-												isSelected={isSelectedAll} 
+												isSelected={isSelectedAll}
+												style={bgc === null ? defaultColor : bgc ? greenColor : redColor}
 												/>);
 			});
 		}
@@ -94,6 +108,7 @@ class TaskTests extends Component {
 							<th style={{paddingBottom: '10px'}} >ტესტი</th>
 							<th style={{paddingBottom: '10px'}} >Input</th>
 							<th style={{paddingBottom: '10px'}} >Output</th>
+							<th style={{paddingBottom: '10px'}} >შედეგი</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -135,19 +150,21 @@ class TestElement extends Component {
 	render() {
 		const inputs = this.getSlices('\n', this.props.data.input);
 		const outputs = this.getSlices('\n', this.props.data.output);
+		const result = this.props.result;
 
 		return (
-			<tr>
+			<tr> 
 				<td>
 					<Checkbox disabled={this.props.isDisabled} 
 								onClick={this.onTestClick}
 								checked={this.state.isSelected}></Checkbox>
 				</td>
-				<td style={{fontSize: '16px', paddingTop: '20px'}}>
+				<td style={{fontSize: '16px', paddingTop: '20px'}, this.props.style}>
 					{this.props.data.name}
 				</td>
-				<td>{inputs}</td>
-				<td>{outputs}</td>
+				<td style={{display: 'block', height: '100px', overflow: 'auto'}} >{inputs}</td>
+				<td style={{height: '100px', overflow: 'auto'}} >{outputs}</td>
+				<td style={{height: '100px', overflow: 'auto'}} >{result}</td>
 			</tr>
 		);
 	}

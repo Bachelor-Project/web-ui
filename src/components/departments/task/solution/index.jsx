@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import AceEditor from 'react-ace';
-import {Panel, FormGroup, FormControl, Button} from 'react-bootstrap';
+import {Panel, FormGroup, FormControl} from 'react-bootstrap';
 import java from 'brace/mode/java';
 import python from 'brace/mode/python';
 import c_cpp from 'brace/mode/c_cpp';
@@ -12,13 +12,16 @@ import 'brace/theme/tomorrow'; import 'brace/theme/twilight'; import 'brace/them
 
 import $ from 'jquery';
 
+import ProgressButton, {STATE} from 'react-progress-button';
+import styles from './progress_button.css';
 
 
 const labels = {
 	resultPanelHeader: "შედეგი",
 	compileButton: "კომპილაცია",
 	runButton: "გაშვება",
-	language: "ენა"
+	language: "ენა",
+	exeResult: "შედეგებისთვის იხილეთ ტესტების განყოფილება."
 }
 
 const allThemes = ["chrome", "clouds", "dreamweaver", "eclipse", "github", "kuroir", "monokai", "solarized_dark",
@@ -39,11 +42,16 @@ class TaskSolution extends Component {
 
 			execResult: '',
 			execState: '',
-			execStyle: 'default'
+			execPanelStyle: 'default',
+
+			comButtonState: STATE.NOTHING,
+			runButtonState: STATE.NOTHING,
 		}
 	}
 
 	onCompileClick = () => {
+		this.setState({comButtonState: 'loading'});
+
 		var data = {};
   		data['user'] = window.localStorage.user;
   		data['taskName'] = this.props.taskName;
@@ -51,15 +59,23 @@ class TaskSolution extends Component {
   		data['code'] = this.state.editorValue;
 
 		$.ajax({
-			url: '/execution/api/compile',
+			// url: '/execution/api/compile',
+			url: '/compile',
             method: 'put',
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(data),
             success: (data) => {
-            	this.setState({ compileSuccess: true, execResult : "წარმატებით დაკომპილირდა", execState: 'success', execStyle: 'success' });
+            	this.setState({ compileSuccess: true, execResult : "წარმატებით დაკომპილირდა", 
+            					execState: 'success', execPanelStyle: 'success', comButtonState: STATE.SUCCESS });
             },
             error: (data) => {
-            	this.setState({ execResult : data.responseText, execState: 'error', execStyle: 'danger' });
+            	const compileErrorText = $.parseJSON(data.responseText).reduce((accumulator, currentValue) => {
+            		return accumulator + "\n" + "line: \t" + currentValue.line + "\n" + 
+        										"error: \t" + currentValue.errorText + "\n" + 
+        										"code: \t" + currentValue.code;
+            	}, "");
+            	this.setState({ compileSuccess: false, execResult : compileErrorText, 
+            		execState: 'error', execPanelStyle: 'danger', comButtonState: STATE.ERROR });
             }
 		});
 
@@ -75,25 +91,45 @@ class TaskSolution extends Component {
 
 	onRunClick = (e) => {
 		// this.setState({compileSuccess: false});
+		this.setState({runButtonState: 'loading'});
 
 		var dataJson = {};
 		dataJson["lang"] = this.state.defaultLan;
 		dataJson["username"] = window.localStorage.getItem("user");
 		dataJson["taskId"] = this.props.taskId;
-		dataJson["compiled"] = true;
+		dataJson["compiled"] = this.state.compileSuccess;
 
 		$.ajax({
-			url: '/files_data/api/run_code',
+			// url: '/files_data/api/run_code',
+			url: '/run_code',
 			method: 'POST',
 			contentType: "application/json; charset=utf-8",
             data: JSON.stringify(dataJson),
 
             success: (data) => {
-            	this.setState({ execResult : JSON.stringify(data)});
+            	// 1. panel unda sheecvalos peri
+            	// 2. loading button unda sheecvalos feri
+            	// 3. testebis table-shi testebs udna sheecvalos feri
+            	var defaultPanelStyle = 'success';
+            	var defaultRunButtonState = STATE.SUCCESS;
+            	data.forEach((testResult) => {
+            		if (testResult.exType !== 'NoError'){
+            			if (this.state.execStyle !== 'danger') {
+            				defaultPanelStyle = 'danger';
+            			}
+            			if (this.state.runButtonState !== STATE.ERROR) {
+            				defaultRunButtonState = STATE.ERROR;
+            			}
+            			
+            		}
+            	});
+            	this.props.testsResultHandler(data);
+            	this.setState({ execResult : labels.exeResult, 
+        						execPanelStyle: defaultPanelStyle,
+            					runButtonState: defaultRunButtonState});
             },
             error: (data) => {
-            	alert("შეცდომა");
-
+            	this.setState({ execResult : JSON.stringify(data), runButtonState: STATE.ERROR});
             	alert(JSON.stringify(data));
             }
 		});
@@ -113,7 +149,7 @@ class TaskSolution extends Component {
 	} 
 
 	onEditorValueChange = (newValue, event) => {
-		this.setState({ compileSuccess: false, editorValue: newValue });
+		this.setState({ compileSuccess: false, editorValue: newValue, runButtonState: STATE.NOTHING });
 	}
 
 	onLanguageChange = (event) => {
@@ -121,7 +157,7 @@ class TaskSolution extends Component {
 		this.setState({ defaultLan: selectedOptionName });
 
 		const languages = this.props.taskLanguages.filter( (lang) => {
-			return lang.name == selectedOptionName;
+			return lang.name === selectedOptionName;
 		});
 		if (languages.length > 0){
 			const language = languages[0];
@@ -148,21 +184,25 @@ class TaskSolution extends Component {
 		const themes = allThemes.map((theme, i) => {
 						return (<option key={i} value={theme} id={'theme-' + i}>{theme}</option>);
 					});
-		const disabledRun = !this.state.compileSuccess;
+		const showRunButton = this.state.compileSuccess;
 		return (
 			<div>
 				<div style={{position: 'relative'}} >
-					<Button onClick={this.onCompileClick} style={{margin: "8px"}} disabled={!isSigned} >
-								{labels.compileButton}</Button>
-					<Button onClick={this.onRunClick} style={{margin: "8px"}} disabled={disabledRun} >
-								{labels.runButton}</Button>
+					{isSigned && <ProgressButton onClick={this.onCompileClick} state={this.state.comButtonState} 
+												style={styles, {margin: "8px"}} >
+			      					{labels.compileButton}
+			    				</ProgressButton>}
+    				{showRunButton && <ProgressButton onClick={this.onRunClick} state={this.state.runButtonState} 
+													style={styles, {margin: "8px"}} >
+				      					{labels.runButton}
+				    				</ProgressButton>}
 
-					<FormGroup style={{width: "16%", position: 'absolute', top: '8px', right: 'calc(16% + 20px)'}} controlId="solutionLangsSelected" >
+					<FormGroup style={{width: "16%", position: 'absolute', top: '8px', right: 'calc(16% + 20px)'}} >
 						<FormControl id="langSelector" componentClass="select" value={this.state.defaultLan} placeholder={labels.language} onChange={this.onLanguageChange} >
 							{languages}
 						</FormControl>
 					</FormGroup>
-					<FormGroup style={{width: "16%", position: 'absolute', top: '8px', right: '10px'}} controlId="solutionThemeSelected" >
+					<FormGroup style={{width: "16%", position: 'absolute', top: '8px', right: '10px'}} >
 						<FormControl componentClass="select" placeholder={labels.language} onChange={this.onThemeChange} >
 							{themes}
 						</FormControl>
@@ -186,9 +226,9 @@ class TaskSolution extends Component {
 					  tabSize: 4,
 					  }}
 				/>
-				<Panel header={labels.resultPanelHeader}  bsStyle={this.state.execStyle} >
+				<Panel header={labels.resultPanelHeader}  bsStyle={this.state.execPanelStyle} >
 					<FormGroup controlId="solutionResultGroup" >
-				    	<FormControl componentClass="textarea" value={this.state.execResult} />
+				    	<FormControl componentClass="textarea" value={this.state.execResult} style={{height: '150px'}} />
 				    </FormGroup>
 				</Panel>
 			</div>

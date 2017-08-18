@@ -67,7 +67,7 @@ export default class TaskUploadModal extends Component {
 				</Modal.Header>
 				<Modal.Body>
 					<form action="/files_data/api/uploadTask" method="post" encType="multipart/form-data">
-				        ამოცანის მონაცემების არქივი: <input style={{display: 'inline'}} type="file" name="file" ref={input => this.fileInput = input} /> <br /><br />
+				        ამოცანის მონაცემების არქივი: <input style={{display: 'inline'}} type="file" name="file" ref={input => this.fileInput = input } /> <br /><br />
 					   	<input type="number" name="time_lm" placeholder="დროის ლიმიტი (წმ.)" ref={input => this.timeInput = input} />
 					   	<input type="number" name="memory_lm" placeholder="მეხსიერების ლიმიტი (მბ.)" ref={input => this.memoryInput = input} /><br/><br/>
 					   	<FormSelector options={this.props.mainTopics} onSelectedNew={this.onSelectedNew} onSelectedExisted={this.onSelectedExisted}/><br />

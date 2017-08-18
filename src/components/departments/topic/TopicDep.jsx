@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Button} from 'react-bootstrap';
 import $ from 'jquery';
 
 import {ToggleMenu} from '../../generals/helpers/Components';
@@ -88,7 +87,7 @@ class TopicDep extends Component {
 	}
 
 	render (){
-		const isSigned = window.localStorage.getItem("token") !== null;
+		// const isSigned = window.localStorage.getItem("token") !== null;
 
 		return (
 			<div id="outer-container" >

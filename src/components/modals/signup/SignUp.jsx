@@ -1,15 +1,8 @@
 import React, {Component} from 'react';
 import {Modal} from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
-import {FieldGroup, FieldGroupWithAddon} from '../../generals/helpers/Components';
+import {FieldGroup} from '../../generals/helpers/Components';
 import $ from 'jquery';
-
-
-const ob = {
-	username: "bla",
-	password: "blu",
-	email: "rame@ge.ge"
-}
 
 
 export default class SignUpModal extends Component {

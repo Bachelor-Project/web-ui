@@ -8,24 +8,6 @@ import $ from 'jquery';
 
 const headers = ['N', 'ამოცანის თემა', 'რაოდენობა'];
 
-const tasks = [
-	{
-		id: 1,
-		name: 'გრაფი',
-		number: '10'
-	},
-	{
-		id: 2,
-		name: 'გეომეტრია',
-		number: '15'
-	},
-	{
-		id: 3,
-		name: 'ალგებრა',
-		number: '9'
-	}
-];
-
 class Tasks extends Component {
 
 	constructor(props){
@@ -42,7 +24,8 @@ class Tasks extends Component {
 
 	fetchMainTopicsWithCount = () => {
 		$.ajax({
-            url: '/files_data/api/tasks_counting_main_topics',
+            // url: '/files_data/api/tasks_counting_main_topics',
+            url: '/tasks_counting_main_topics',
             type: 'GET',
             success: (data) => {
             			var mainTopicsData = data.map((elem) => {

@@ -8,11 +8,6 @@ import $ from 'jquery';
 
 /* ---------------- Sign in modal ---------------- */
 
-const signIntOb = {
-    username: 'bla',
-    password: 'blu'
-}
-
 export default class SignInModal extends Component {
 
     constructor(props) {
@@ -29,14 +24,14 @@ export default class SignInModal extends Component {
         requestJson.password = $('#signInPassword').val();
 
         $.ajax({
-            url: '/bp_signin/app/signin',
+            // url: '/bp_signin/app/signin',
+            url: '/signin',
             method: 'post',
             // headers: {'Authentication': window.localStorage.getItem("token")}, // to "log out"-ti gaketebulia token agar iqneba
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(requestJson)
         })
         .then(function(responseUser, statusText, xhr){
-            console.log('success  ssss', xhr.getResponseHeader('x-token'));
                 this.props.onSuccessAction(responseUser, xhr.getResponseHeader('x-token'));
                 this.onHideAction();
             }.bind(this))

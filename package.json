@@ -13,6 +13,7 @@
     "react-bootstrap-carousel": "^1.2.0",
     "react-burger-menu": "^2.1.1",
     "react-dom": "^15.6.1",
+    "react-progress-button": "^5.0.4",
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
     "react-scripts": "1.0.10",
@@ -52,8 +53,8 @@
     "/signin": {
       "target": "http://localhost:8080/bp_signin/app/"
     },
-    "/compile" :{
-      "target": "http://localhost:8080/execution/api/"  
+    "/compile": {
+      "target": "http://localhost:8080/execution/api/"
     },
     "/tasks_min_data": {
       "target": "http://localhost:8080/files_data/api"

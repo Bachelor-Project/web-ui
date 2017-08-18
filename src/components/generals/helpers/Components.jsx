@@ -22,7 +22,7 @@ export function FieldGroup ({id, validState, label, help, feedback, ...props}) {
 
 export function FieldGroupWithAddon ({id, validState, addonSymbol, help, feedback, inputID, ...props}) {
     return (
-        <FormGroup controlId={id} validationState={validState}>
+        <FormGroup validationState={validState}>
             <InputGroup>
                 <InputGroup.Addon>{addonSymbol}</InputGroup.Addon>
                 <FormControl id={inputID} {...props} />
@@ -90,11 +90,13 @@ export class FormSelector extends Component {
     }
 
     onNewClick = (e) => {
-        this.setState({ textFieldDisabled: false, selectorDisabled: true })
+        this.setState({ textFieldDisabled: false, selectorDisabled: true });
+        this.props.selectNewHandler();
     }
 
     onExistedClick = (e) => {
-        this.setState({ textFieldDisabled: true, selectorDisabled: false })
+        this.setState({ textFieldDisabled: true, selectorDisabled: false });
+        this.props.selectExistedHandler();
     }
 
     onTextFieldChange = (e) => {

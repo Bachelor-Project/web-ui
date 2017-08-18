@@ -85,6 +85,7 @@ class App extends Component {
     fetchTaskModalData = () => {
         this.fetchMainTopics();
         $.ajax({
+            // url: '/files_data/api/levels',
             url: '/files_data/api/levels',
             type: 'GET',
             success: (data) => {
@@ -100,7 +101,8 @@ class App extends Component {
 
     fetchMainTopics = () => {
         $.ajax({
-            url: '/files_data/api/main_topics',
+            // url: '/files_data/api/main_topics',
+            url: '/main_topics',
             type: 'GET',
             success: (data) => {
                         this.setState({ mainTopics: data });

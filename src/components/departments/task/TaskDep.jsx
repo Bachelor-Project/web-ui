@@ -106,7 +106,9 @@ class TaskDep extends Component {
 			solutionTabs: [],
 			solutionResult: '',
 
-			task_name: ''
+			task_name: '',
+			testsExecResult: [],
+			orderedTest: []
 		}
 	}
 
@@ -127,9 +129,26 @@ class TaskDep extends Component {
 		this.setState({ headerTarget: hinterID });
 	}
 
+	testResultHandler = (arr) => {
+		const res = arr.map((elem) => {
+			return {name: elem.testName, passed: (elem.exType === 'NoError'), error: elem.message}
+		});
+
+		var uptabs = this.state.taskTabs;
+		const testTab = uptabs[1];
+		testTab.content = <TaskTests tests={this.state.orderedTest} testsResult={res} />;
+		
+		var newTaskTabs = [];
+		newTaskTabs.push(this.state.taskTabs[0]);
+		newTaskTabs.push(testTab);
+
+		this.setState({taskTabs: newTaskTabs});
+	}
+
 	componentWillMount(){
 		$.ajax({
-			url: '/files_data/api/tasks_min_data/' + this.props.match.params.mainTopicId,
+			// url: '/files_data/api/tasks_min_data/' + this.props.match.params.mainTopicId,
+			url: '/tasks_min_data/' + this.props.match.params.mainTopicId,
 			method: 'GET',
 			success: (data) => {
 				data.forEach((task_min) => {
@@ -149,7 +168,8 @@ class TaskDep extends Component {
 
 	fetchMainTopicName = (mainTopicID) => {
 		$.ajax({
-            url: '/files_data/api/name_main_topic',
+            // url: '/files_data/api/name_main_topic',
+            url: '/name_main_topic',
             type: 'GET',
             data: {
                 id: mainTopicID,
@@ -164,7 +184,8 @@ class TaskDep extends Component {
 
 	fetchTaskById = (taskID) => {
 		$.ajax({
-			url: '/files_data/api/task_full_data/' + taskID,
+			// url: '/files_data/api/task_full_data/' + taskID,
+			url: '/task_full_data/' + taskID,
 			method: 'GET',
 			success: (data) => {
 				const tmLimit = "დროის ლიმიტი: " + data.task.timeLimit + " წმ.; ";
@@ -187,7 +208,7 @@ class TaskDep extends Component {
 									id: 2,
 									htmlID: "testsTab",
 									title: "ტესტები",
-									content: <TaskTests tests={sortedTests} />
+									content: <TaskTests tests={sortedTests} testsResult={this.state.testsExecResult} />
 								}
 							];
 				var bottomTabs = [
@@ -197,7 +218,8 @@ class TaskDep extends Component {
 										title: "ამოხსნა",
 										content: <TaskSolution taskLanguages={languages} 
 												result={this.state.solutionResult} 
-												taskName={data.task.name} taskId={taskID} />
+												taskName={data.task.name} taskId={taskID} 
+												testsResultHandler={this.testResultHandler} />
 									},
 									{
 										id: 2,
@@ -206,7 +228,9 @@ class TaskDep extends Component {
 										content: <TaskAnalyzer taskID={taskID} />
 									}
 								];
-				this.setState({ taskTabs : upTabs, solutionTabs: bottomTabs, hinters: data.hints, task_name: data.task.name });
+				this.setState({ taskTabs : upTabs, solutionTabs: bottomTabs, 
+								hinters: data.hints, task_name: data.task.name,
+								orderedTest: sortedTests });
 			},
 			dataType: 'json',
             cache: false
@@ -243,7 +267,3 @@ class TaskDep extends Component {
 }
 
 export default TaskDep;
-
-
-// <HeaderNavBar target={this.state.headerTarget} onConditionClick={this.handleCondition}
-// 									onSolutionClick={this.handleSolution} onHinterClick={this.handleHinter} />

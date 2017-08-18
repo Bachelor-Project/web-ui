@@ -23,7 +23,16 @@ export default class TopicUploadModal extends Component {
 		this.state = {
 			selectedMainTopic: '',
 			selectedMainTopicID: 0,
-			priorities: []
+			priorities: [],
+
+			selectNew: false,
+			selectExisted: false
+		}
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.mainTopics.length > 0){
+			this.setState({selectedMainTopicID: nextProps.mainTopics[0].id});
 		}
 	}
 
@@ -36,20 +45,34 @@ export default class TopicUploadModal extends Component {
 					alert("შეავსეთ ყველა ველი");
 					e.preventDefault();
 		}
+		if (!(this.state.selectedNew || this.state.selectedExisted)){
+			alert("მონიშნეთ \"ახალი\" და \"არსებული\" ველებიდან ერთ-ერთი.");
+			e.preventDefault();
+		}
 	}
 
 	onSelectedNew = (name) => {
 		this.setState({ selectedMainTopic: name });
+	}
+	selectNew = () => {
+		this.setState({selectNew: true});
+		alert("selectNew: " + this.state.selectNew);
 	}
 
 	onSelectedExisted = (id) => {
 		this.setState({ selectedMainTopicID: id });
 		this.fetchPrioritiesFor(id);
 	}
+	selectExisted = () => {
+		this.setState({selectExisted: true});
+		alert("selectExisted: " + this.state.selectExisted);
+	}
+
 
 	fetchPrioritiesFor = (mainTopicID) => {
         $.ajax({
-            url: '/files_data/api/priorities',
+            // url: '/files_data/api/priorities',
+            url: '/priorities',
             type: 'GET',
             data: {
                 main_topic: mainTopicID,
@@ -73,9 +96,10 @@ export default class TopicUploadModal extends Component {
 					<Modal.Title >{this.props.title}</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<form action="/files_data/api/uploadTopic" method="post" encType="multipart/form-data" encode="utf8" >
+					<form action="/uploadTopic" method="post" encType="multipart/form-data" acceptCharset="UTF-8">
 				        თემა: <input style={{display: 'inline'}} type="file" name="file" ref={input => this.fileInput = input} /> <br /><br />
-					   	<FormSelector options={this.props.mainTopics} onSelectedNew={this.onSelectedNew} onSelectedExisted={this.onSelectedExisted} /><br />
+					   	<FormSelector options={this.props.mainTopics} onSelectedNew={this.onSelectedNew} onSelectedExisted={this.onSelectedExisted} 
+					   					selectNewHandler={this.selectNew} selectExistedHandler={this.selectExisted} /><br />
 					   	<input type="number" name="priority" placeholder="პრიორიტეტი" ref={input => this.priorityInput = input} />
 					   	<TopicsPrioritySelector data={this.state.priorities} /><br /><br />
 					   	<input type="submit" value="ატვირთვა" onClick={this.onUploadClick} />
@@ -85,3 +109,5 @@ export default class TopicUploadModal extends Component {
 		);
 	}
 }
+
+// action="/files_data/api/uploadTopic"

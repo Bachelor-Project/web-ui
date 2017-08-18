@@ -38,7 +38,8 @@ class TaskAnalyzer extends Component {
 
 	fetchComments = (taskId) => {
 		$.ajax({
-			url: '/bp_analyzer/api/comments/' + taskId,
+			// url: '/bp_analyzer/api/comments/' + taskId,
+			url: '/comments/' + taskId,
 			method: 'GET',
 			success: (data) => {
 				this.setState({ comments: data });

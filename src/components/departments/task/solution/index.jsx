@@ -69,13 +69,19 @@ class TaskSolution extends Component {
             					execState: 'success', execPanelStyle: 'success', comButtonState: STATE.SUCCESS });
             },
             error: (data) => {
-            	const compileErrorText = $.parseJSON(data.responseText).reduce((accumulator, currentValue) => {
-            		return accumulator + "\n" + "line: \t" + currentValue.line + "\n" + 
-        										"error: \t" + currentValue.errorText + "\n" + 
-        										"code: \t" + currentValue.code;
-            	}, "");
+            	var compileErrorText = '';
+            	if (data.status == 405){
+            		compileErrorText = data.responseText;
+            	}
+            	else if (data.status == 400){
+	            	compileErrorText = $.parseJSON(data.responseText).reduce((accumulator, currentValue) => {
+	            		return accumulator + "\n" + "line: \t" + currentValue.line + "\n" + 
+	        										"error: \t" + currentValue.errorText + "\n" + 
+	        										"code: \t" + currentValue.code;
+	            	}, "");
+            	}
             	this.setState({ compileSuccess: false, execResult : compileErrorText, 
-            		execState: 'error', execPanelStyle: 'danger', comButtonState: STATE.ERROR });
+	            		execState: 'error', execPanelStyle: 'danger', comButtonState: STATE.ERROR });
             }
 		});
 
@@ -168,7 +174,7 @@ class TaskSolution extends Component {
 			}
 			this.setState({ editorValue: language.code, editorMode: mode });
 		}
-		
+		this.setState({compileSuccess: false});
 	}
 
 	onThemeChange = (event) => {

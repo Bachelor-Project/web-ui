@@ -22,7 +22,7 @@ const languages = [
 	{
 		id: 2,
 		name: "Python",
-		descrip: "Python 3",
+		descrip: "Python 3.5",
 		code: "\nif __name__==\"__main__\":\n\n"
 	},
 	{

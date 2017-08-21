@@ -11,49 +11,66 @@ export default class TaskUploadModal extends Component {
 
 		this.state = {
 			selectedMainTopic: '',
-			selectedMainTopicID: 0
+			timeLimit: '',
+			memLimit: ''
 		}
 	}
 
 
 	onUploadClick = (e) => {
-		// var fileInLength = 0;
-		// if (this.fileInput.files.length === fileInLength || 
-		// 	!this.timeInput.value || !this.memoryInput.value || 
-		// 	!(this.state.mainTopicSelected && this.state.selectedMainTopicID > 0)){
-		// 		alert("შეავსეთ ყველა ველი");
-		// 		e.preventDefault();
-		// }
+		var fileInLength = 0;
+		if (this.fileInput.files.length === fileInLength){
+				alert("ფაილი არ არის არჩეული");
+				e.preventDefault();
+		}
 	}
 
-	onSelectedNew = (name) => {
-		this.setState({ selectedMainTopic: name });
+	selectorChange = (e) => {
+		this.setState({ selectedMainTopic: e.target.value });
 	}
 
-	onSelectedExisted = (id) => {
-		this.setState({ selectedMainTopicID: id });
+	timeLimitChange = (e) => {
+		this.setState({ timeLimit: e.target.value });
 	}
 
+	memoryLimitChange = (e) => {
+		this.setState({ memLimit: e.target.value });
+	}
+
+	resetState = () => {
+    	this.setState({selectedMainTopic: '', timeLimit: '', memLimit: ''});
+    	this.props.onHide();
+    }
 
 	render(){
+		var mainTopics = [];
+		mainTopics.push(<option key={0} value="" ></option>);
+		if (this.props.mainTopics !== undefined ){
+			this.props.mainTopics.forEach((elem) => {
+				mainTopics.push(<option key={elem.id} value={elem.descrip} >{elem.descrip}</option>);
+			});
+		}
+
 		const levels = this.props.levels.map((level) => {
 			return (<option key={level.id} value={level.descrip} >{level.descrip}</option>);
 		});
 
+		const uploadShow = this.state.selectedMainTopic && this.state.timeLimit && this.state.memLimit;
+
 		return (
-			<Modal show={this.props.show} onHide={this.props.onHide}>
+			<Modal show={this.props.show} onHide={this.resetState}>
 				<Modal.Header closeButton>
 					<Modal.Title >{this.props.title}</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<form action="/files_data/api/uploadTask" method="post" encType="multipart/form-data">
+					<form action="/uploadTask" method="post" encType="multipart/form-data">
 				        ამოცანის მონაცემების არქივი: <input style={{display: 'inline'}} type="file" name="file" ref={input => this.fileInput = input } /> <br /><br />
-					   	<input type="number" name="time_lm" placeholder="დროის ლიმიტი (წმ.)" ref={input => this.timeInput = input} />
-					   	<input type="number" name="memory_lm" placeholder="მეხსიერების ლიმიტი (მბ.)" ref={input => this.memoryInput = input} /><br/><br/>
-					   	<FormSelector options={this.props.mainTopics} onSelectedNew={this.onSelectedNew} onSelectedExisted={this.onSelectedExisted}/><br />
+					   	<input type="number" name="time_lm" placeholder="დროის ლიმიტი (წმ.)" onChange={this.timeLimitChange} />
+					   	<input type="number" name="memory_lm" placeholder="მეხსიერების ლიმიტი (მბ.)" onChange={this.memoryLimitChange} /><br/><br/>
+					   	არსებული "მთავარი თემები": <select name="mainTopic" onChange={this.selectorChange} >{mainTopics}</select><br /><br />
 					   	დონე: <select name="level">{levels}</select><br /><br />
 					   	
-					   	<input type="submit" value="ატვირთვა" onClick={this.onUploadClick}/>
+					   	{uploadShow && <input type="submit" value="ატვირთვა" onClick={this.onUploadClick}/>}
 					</form>
 				</Modal.Body>
 			</Modal>
@@ -61,20 +78,3 @@ export default class TaskUploadModal extends Component {
 		);
 	}
 }
-
-
-// <FieldGroup id="tests-file" label="აირჩიეთ ტესტების ფაილის არქივი" type="file" />
-// <FieldGroup id="hinter-file" label="აირჩიეთ მითითებების ფაილი" type="file" />
-
-
-// <form >
-// 	<FieldGroup id="task-file" label="აირჩიეთ ამოცანის მონაცემების არქივი" type="file" />
-// 	<FieldGroup id="time-limit" label="დროის ლიმიტი (წმ)" type="number" />
-// 	<FieldGroup id="time-limit" label="მეხსიერების ლიმიტი (მგ)" type="number" />
-// 	<Selector title="შეიძლება დაიწეროს:" selectorData={languages} isMultiple={true} searchable={true} 
-// 				controlId="task-upload-supported-languages" />
-// 	<Selector title="თემა" selectorData={this.props.mainTopics} isMultiple={true} searchable={true} 
-// 				controlId="task-upload-associated-topic" />
-// 	<Selector title="დონე" selectorData={this.props.levels} isMultiple={false} searchable={false} 
-// 				controlId="task-upload-levels" />
-// </form>

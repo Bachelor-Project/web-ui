@@ -25,12 +25,6 @@ export default class TopicUploadModal extends Component {
 			priorities: [],
 			mainTopics: [],
 			topicPriority: ''
-
-			// selectedMainTopicID: 0,
-
-			// selectNew: false,
-			// selectExisted: false,
-
 		}
 	}
 
@@ -44,7 +38,7 @@ export default class TopicUploadModal extends Component {
 	onUploadClick = (e) => {
 		var fileInLength = 0;
 		if (this.fileInput.files.length === fileInLength){
-					alert("აირჩიეთ ფაილი");
+					alert("ფაილი არ არის არჩეული");
 					e.preventDefault();
 		}
 	}
@@ -91,7 +85,7 @@ export default class TopicUploadModal extends Component {
 
 	render (){
 		var mainTopics = [];
-		mainTopics.push(<option key={0} value={0} ></option>);
+		mainTopics.push(<option key={0} value="" ></option>);
 		if (this.props.mainTopics !== undefined ){
 			this.props.mainTopics.forEach((elem) => {
 				mainTopics.push(<option key={elem.id} value={elem.descrip} >{elem.descrip}</option>);
@@ -118,10 +112,3 @@ export default class TopicUploadModal extends Component {
 		);
 	}
 }
-
-// action="/files_data/api/uploadTopic"
-
-// onClick={this.onUploadClick}
-
-// <FormSelector options={this.props.mainTopics} onSelectedNew={this.onSelectedNew} onSelectedExisted={this.onSelectedExisted} 
-					   					// selectNewHandler={this.selectNew} selectExistedHandler={this.selectExisted} /><br />

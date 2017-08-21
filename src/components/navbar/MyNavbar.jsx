@@ -40,7 +40,7 @@ class MyNavbar extends Component {
                             <MenuItem eventKey={2.1} >
                                 <Glyphicon glyph="book" />
                                 {'  '}
-                                <LinkComponent to={this.props.topicsPath} label="თემები" />
+                                <LinkComponent to={this.props.topicsPath} label="თეორიები" />
                             </MenuItem>
                             <MenuItem eventKey={2.2}>
                                 <Glyphicon glyph="pencil" />
@@ -52,17 +52,56 @@ class MyNavbar extends Component {
                         {this.props.isSigned && this.props.isUploader &&
                             <NavDropdown eventKey={3} title="ატვირთვა" id="main-upload" active={3 === this.state.activeKey}>
                                 <MenuItem eventKey={3.1} >
+                                    <span onClick={this.props.onMainTopicAddClick} >
+                                        <Glyphicon glyph="plus-sign" />
+                                        {' '}
+                                        მთავარი თემა
+                                    </span>
+                                </MenuItem>
+                                <MenuItem eventKey={3.2} >
                                     <span onClick={this.props.onTopicUploadClick} >
                                         <Glyphicon glyph="book" />
                                         {'  '}
-                                        თემა
+                                        თეორია
                                     </span>
                                 </MenuItem>
-                                <MenuItem eventKey={3.1} >
+                                <MenuItem eventKey={3.3} >
                                     <span onClick={this.props.onTaskUploadClick} >
                                         <Glyphicon glyph="pencil" />
                                         {'  '}
                                         ამოცანა
+                                    </span>
+                                </MenuItem>
+                            </NavDropdown>
+                        }
+                        {this.props.isSigned && this.props.isUploader &&
+                            <NavDropdown eventKey={4} title="მოდიფიკაცია" id="main-update" active={4 === this.state.activeKey}>
+                                <MenuItem eventKey={4.2} >
+                                    <span onClick={this.props.onMainTopicUpdateClick} >
+                                        <Glyphicon glyph="random" />
+                                        {' '}
+                                        მთავარი თემის ცვლილება
+                                    </span>
+                                </MenuItem>
+                                <MenuItem eventKey={4.3} >
+                                    <span onClick={this.props.onMainTopicDeleteClick} >
+                                        <Glyphicon glyph="trash" />
+                                        {' '}
+                                        მთავარი თემის წაშლა
+                                    </span>
+                                </MenuItem>
+                                <MenuItem eventKey={4.4} >
+                                    <span onClick={this.props.onTopicDeleteClick} >
+                                        <Glyphicon glyph="trash" />
+                                        {' '}
+                                        თეორიის წაშლა
+                                    </span>
+                                </MenuItem>
+                                <MenuItem eventKey={4.5} >
+                                    <span onClick={this.props.onTaskDeleteClick} >
+                                        <Glyphicon glyph="trash" />
+                                        {' '}
+                                        ამოცანის წაშლა
                                     </span>
                                 </MenuItem>
                             </NavDropdown>

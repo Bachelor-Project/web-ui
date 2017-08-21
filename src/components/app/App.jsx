@@ -7,8 +7,13 @@ import RouterMain from '../navbar/RouterMain';
 
 import SignInModal from '../modals/signin/SignIn';
 import SignUpModal from '../modals/signup/SignUp';
+import MainTopicUploadModal from '../modals/upload/MainTopicUploader';
 import TopicUploadModal from '../modals/upload/TopicUploader';
 import TaskUploadModal from '../modals/upload/TaskUploader';
+import MainTopicUpdateModal from '../modals/modification/MainTopicUpdater';
+import MainTopicRemoveModal from '../modals/modification/MainTopicRemover';
+import TopicRemoveModal from '../modals/modification/TopicRemover';
+import TaskRemoveModal from '../modals/modification/TaskRemover';
 import $ from 'jquery';
 
 
@@ -34,11 +39,18 @@ class App extends Component {
             isUserSignIn: window.localStorage.getItem("user") !== null,
             username: window.localStorage.getItem("user"),
 
+            mainTopicUploadOpen: false,
+            mainTopicUpdateOpen: false,
+            mainTopicRemoveOpen: false,
+            topicRemoveOpen: false,
+            taskRemoveOpen: false,
             topicUploadOpen: false,
             taskUploadOpen: false,
 
             mainTopics: [],
-            levels: []
+            levels: [],
+            topics: [],
+            tasks: []
         }
     }
 
@@ -72,9 +84,6 @@ class App extends Component {
         this.setState({ topicUploadOpen: true });
         this.fetchMainTopics();
     }
-    topicUploadClose = () => {
-        this.setState({ topicUploadOpen: false });
-    }
 
 
     taskUploadOpenHandler = () => {
@@ -86,7 +95,7 @@ class App extends Component {
         this.fetchMainTopics();
         $.ajax({
             // url: '/files_data/api/levels',
-            url: '/files_data/api/levels',
+            url: '/levels',
             type: 'GET',
             success: (data) => {
                     var levelsData = data.map((elem) => {
@@ -115,9 +124,32 @@ class App extends Component {
         });
     }
 
+    topicUploadClose = () => {
+        this.setState({ topicUploadOpen: false });
+    }
 
     taskUploadClose = () => {
         this.setState({ taskUploadOpen: false });
+    }
+
+    mainTopicUpdateClose = () => {
+        this.setState({ mainTopicUpdateOpen: false });
+    }
+
+    mainTopicUploadClose = () => {
+        this.setState({ mainTopicUploadOpen: false });
+    }
+
+    mainTopicRemoveClose = () => {
+        this.setState({ mainTopicRemoveOpen: false });
+    }
+
+    topicRemoveClose = () => {
+        this.setState({ topicRemoveOpen: false });
+    }
+
+    taskRemoveClose = () => {
+        this.setState({ taskRemoveOpen: false });
     }
 
     decodeUnicode(str) {
@@ -148,6 +180,65 @@ class App extends Component {
         this.setState({ isUserSignIn: true, isUploader: uploader });
     }
 
+    onMainTopicAdd = () => {
+        this.setState({mainTopicUploadOpen: true});
+    }
+
+    onMainTopicUpdate = () => {
+        this.setState({mainTopicUpdateOpen: true});
+        this.fetchMainTopics();
+    }
+
+    onMainTopicDelete = () => {
+        this.setState({ mainTopicRemoveOpen: true });
+        this.fetchMainTopics();
+    }
+
+    onTopicDelete = () => {
+        this.setState({ topicRemoveOpen: true });
+        this.fetchAllTopics();
+    }
+
+    onTaskDelete = () => {
+        this.setState({ taskRemoveOpen: true });
+        this.fetchAllTasks();
+    }
+
+    fetchAllTopics = () => {
+        $.ajax({
+            // url: '/files_data/api/all_topics',
+            url: '/all_topics',
+            type: 'GET',
+            success: (data) => {
+                        // console.log(JSON.stringify(data));
+                        var topicsData = data.map((elem) => {
+                            return {id: elem.id, name: elem.name+"."+elem.fielExt, priority: elem.priority};
+                        });
+                        this.setState({ topics: topicsData });
+                    },
+            dataType: 'json',
+            cache: false
+        });
+    }
+
+    fetchAllTasks = () => {
+            $.ajax({
+                // url: '/files_data/api/all_tasks',
+                url: '/all_tasks',
+                type: 'GET',
+                success: (data) => {
+                            // console.log(JSON.stringify(data));
+
+                            var tasksData = data.map((elem) => {
+                                return {id: elem.id, name: elem.name, timeLimit: elem.timeLimit, memLImit: elem.memeoryLimit};
+                            });
+                            this.setState({ tasks: tasksData });
+                        },
+                dataType: 'json',
+                cache: false
+            });
+        }
+
     render() {
         return (
           <div className="App">
@@ -157,7 +248,13 @@ class App extends Component {
                                 signOutHandle={this.handleSignOut}
                                 right_menu1="ავტორიზაცია" right_menu2="რეგისტრაცია" 
                                 onSignInShow={this.onSignInOpen} onSignUpShow={this.onSignUpOpen}
-                                onTopicUploadClick={this.topicUploadOpenHandler} onTaskUploadClick={this.taskUploadOpenHandler}
+                                onTopicUploadClick={this.topicUploadOpenHandler} 
+                                onTaskUploadClick={this.taskUploadOpenHandler}
+                                onMainTopicAddClick={this.onMainTopicAdd}
+                                onMainTopicUpdateClick={this.onMainTopicUpdate}
+                                onMainTopicDeleteClick={this.onMainTopicDelete}
+                                onTopicDeleteClick={this.onTopicDelete}
+                                onTaskDeleteClick={this.onTaskDelete}
                                 homePath={routerPathes.home} topicsPath={routerPathes.topics} tasksPath={routerPathes.tasks} />
 
                     <RouterMain homePath={routerPathes.home} topicsPath={routerPathes.topics} tasksPath={routerPathes.tasks} />
@@ -168,6 +265,17 @@ class App extends Component {
                                         mainTopics={this.state.mainTopics} />
                     <TaskUploadModal title="ამოცანის ატვირთვა" show={this.state.taskUploadOpen} onHide={this.taskUploadClose}
                                         levels={this.state.levels} mainTopics={this.state.mainTopics} />
+
+                    <MainTopicUploadModal title="მთავარი თემის ატვირთვა" show={this.state.mainTopicUploadOpen}
+                                        onHide={this.mainTopicUploadClose} />
+                    <MainTopicUpdateModal title="მთავარი თემის ცვლილება" show={this.state.mainTopicUpdateOpen}
+                                        onHide={this.mainTopicUpdateClose} mainTopics={this.state.mainTopics} />
+                    <MainTopicRemoveModal title="მთავარი თემის წაშლა" show={this.state.mainTopicRemoveOpen}
+                                        onHide={this.mainTopicRemoveClose} mainTopics={this.state.mainTopics} />
+                    <TopicRemoveModal title="თეორიის წაშლა" show={this.state.topicRemoveOpen}
+                                        onHide={this.topicRemoveClose} topics={this.state.topics} />
+                    <TaskRemoveModal title="ამოცანის წაშლა" show={this.state.taskRemoveOpen}
+                                        onHide={this.taskRemoveClose} tasks={this.state.tasks} />
                 </div>
             </BrowserRouter>
           </div>

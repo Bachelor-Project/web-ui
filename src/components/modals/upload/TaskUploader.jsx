@@ -3,26 +3,6 @@ import {Modal} from 'react-bootstrap';
 
 import {FormSelector} from '../../generals/helpers/Components';
 
-// const languages = [
-// 	{
-// 		id: 0,
-// 		descrip: 'ყველა'
-// 	},
-// 	{
-// 		id: 1,
-// 		descrip: 'Java 1.8'
-// 	},
-// 	{
-// 		id: 2,
-// 		descrip: 'GNU c++'
-// 	},
-// 	{
-// 		id: 3,
-// 		descrip: 'Python 2.7' 
-// 	},
-// ];
-
-
 
 export default class TaskUploadModal extends Component {
 

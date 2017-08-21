@@ -26,7 +26,8 @@ class Topics extends Component {
 
 	fetchMainTopicsWithCount = () => {
 		$.ajax({
-            url: '/files_data/api/counting_main_topics',
+            // url: '/files_data/api/counting_main_topics',
+            url: '/counting_main_topics',
             type: 'GET',
             success: (data) => {
             			var mainTopicsData = data.map((elem) => {

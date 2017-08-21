@@ -77,8 +77,26 @@
     "/run_code": {
       "target": "http://localhost:8080/files_data/api"
     },
-    "/bp_apigatway": {
-      "target": "http://localhost:8080/"
+    "/update_main_topic": {
+      "target": "http://localhost:8080/files_data/api"
+    },
+    "/upload_main_topic": {
+      "target": "http://localhost:8080/files_data/api"
+    },
+    "/delete_main_topic": {
+      "target": "http://localhost:8080/files_data/api"
+    },
+    "/delete_topic": {
+      "target": "http://localhost:8080/files_data/api"
+    },
+    "/all_topics": {
+      "target": "http://localhost:8080/files_data/api"
+    },
+    "/all_tasks": {
+      "target": "http://localhost:8080/files_data/api"
+    },
+    "/delete_task": {
+      "target": "http://localhost:8080/files_data/api"
     }
   }
 }

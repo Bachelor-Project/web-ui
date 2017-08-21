@@ -64,7 +64,8 @@ class TaskAnalyzer extends Component {
 			requestJson.taskId = this.props.taskID; // window.localStorage.getItem("taskID");
 
 			$.ajax({
-	            url: '/bp_analyzer/api/new_comment',
+	            // url: '/bp_analyzer/api/new_comment',
+	            url: '/new_comment',
 	            method: 'post',
 	            contentType: "application/json; charset=utf-8",
 	            data: JSON.stringify(requestJson)

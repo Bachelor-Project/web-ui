@@ -38,7 +38,8 @@ class TopicDep extends Component {
 
 	fetchMainTopicName = (mainTopicID) => {
 		$.ajax({
-            url: '/files_data/api/name_main_topic',
+            // url: '/files_data/api/name_main_topic',
+            url: '/name_main_topic',
             type: 'GET',
             data: {
                 id: mainTopicID,
@@ -53,14 +54,15 @@ class TopicDep extends Component {
 
 	fetchMainTopicTopics = (mainTopicID) => {
 		$.ajax({
-            url: '/files_data/api/priorities',
+            // url: '/files_data/api/priorities',
+            url: '/priorities',
             type: 'GET',
             data: {
                 main_topic: mainTopicID,
             },
             success: (data) => {
                         var prioritiesData = data.map((elem) => {
-                                                return {'id': elem.id, 'name': <a href={"/files_data/api/pdf?name="+elem.descrip+".pdf"}  target="pdf_frame" >
+                                                return {'id': elem.id, 'name': <a href={"/pdf?name="+elem.descrip+".pdf"}  target="pdf_frame" >
                                                 									{elem.descrip}</a>};
                                             });
                         mainTopicTreeData.children = prioritiesData;
